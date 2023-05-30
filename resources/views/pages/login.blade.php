@@ -90,7 +90,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <button type="submit" class="btn btn-telesign w-100">Sign in</button>
+{{--                                <button type="submit" class="btn btn-telesign w-100">Sign in</button>--}}
+                                <a href="{{url('/home')}}" class="btn btn-telesign w-100">Sign in</a>
                             </div>
 
                             <div class="text-center">

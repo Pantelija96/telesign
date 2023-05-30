@@ -43,3 +43,8 @@
 .s2d2-btn:hover {
     box-shadow: inset 0px 0px 25px #1479EA;
 }
+
+.btn-telesign{
+    background-color: #0917a1;
+    color: white;
+}
