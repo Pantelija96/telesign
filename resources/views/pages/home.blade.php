@@ -196,15 +196,15 @@
                                                 <div class="card border shadow-none">
                                                     <div class="card-header border-bottom-0">
                                                         <h6 class="mb-0">
-                                                            <a data-bs-toggle="collapse" class="text-body" href="#country1">Russia</a>
+                                                            <a data-bs-toggle="collapse" class="text-body" id="countryRussiaLink" href="#countryRussia">Russia</a>
                                                         </h6>
                                                     </div>
 
-                                                    <div id="country1" class="collapse border-top show">
+                                                    <div id="countryRussia" class="collapse border-top show">
                                                         <div class="card">
                                                             <div class="card-body">
                                                                 <div class="chart-container">
-                                                                    <div class="chart has-fixed-height" id="bars_stacked"></div>
+                                                                    <div class="chart has-fixed-height" id="country1Map"></div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -214,13 +214,17 @@
                                                 <div class="card border shadow-none">
                                                     <div class="card-header border-bottom-0">
                                                         <h6 class="mb-0">
-                                                            <a class="collapsed text-body" data-bs-toggle="collapse" href="#country2">China</a>
+                                                            <a data-bs-toggle="collapse" class="text-body" href="#country2">USA</a>
                                                         </h6>
                                                     </div>
 
-                                                    <div id="country2" class="collapse border-top">
-                                                        <div class="card-body">
-                                                            c
+                                                    <div id="country2" class="collapse border-top show">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="chart-container">
+                                                                    <div class="chart has-fixed-height" id="country2Map"></div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -228,114 +232,22 @@
                                                 <div class="card border shadow-none">
                                                     <div class="card-header border-bottom-0">
                                                         <h6 class="mb-0">
-                                                            <a class="collapsed text-body" data-bs-toggle="collapse" href="#country3">USA</a>
+                                                            <a data-bs-toggle="collapse" class="text-body" href="#country3">China</a>
                                                         </h6>
                                                     </div>
 
-                                                    <div id="country3" class="collapse border-top">
-                                                        <div class="card-body">
-                                                            u
+                                                    <div id="country3" class="collapse border-top show">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="chart-container">
+                                                                    <div class="chart has-fixed-height" id="country3Map"></div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="card border shadow-none">
-                                                    <div class="card-header border-bottom-0">
-                                                        <h6 class="mb-0">
-                                                            <a class="collapsed text-body" data-bs-toggle="collapse" href="#country3">USA</a>
-                                                        </h6>
-                                                    </div>
 
-                                                    <div id="country3" class="collapse border-top">
-                                                        <div class="card-body">
-                                                            u
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="card border shadow-none">
-                                                    <div class="card-header border-bottom-0">
-                                                        <h6 class="mb-0">
-                                                            <a class="collapsed text-body" data-bs-toggle="collapse" href="#country3">USA</a>
-                                                        </h6>
-                                                    </div>
-
-                                                    <div id="country3" class="collapse border-top">
-                                                        <div class="card-body">
-                                                            u
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="card border shadow-none">
-                                                    <div class="card-header border-bottom-0">
-                                                        <h6 class="mb-0">
-                                                            <a class="collapsed text-body" data-bs-toggle="collapse" href="#country3">USA</a>
-                                                        </h6>
-                                                    </div>
-
-                                                    <div id="country3" class="collapse border-top">
-                                                        <div class="card-body">
-                                                            u
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="card border shadow-none">
-                                                    <div class="card-header border-bottom-0">
-                                                        <h6 class="mb-0">
-                                                            <a class="collapsed text-body" data-bs-toggle="collapse" href="#country3">USA</a>
-                                                        </h6>
-                                                    </div>
-
-                                                    <div id="country3" class="collapse border-top">
-                                                        <div class="card-body">
-                                                            u
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="card border shadow-none">
-                                                    <div class="card-header border-bottom-0">
-                                                        <h6 class="mb-0">
-                                                            <a class="collapsed text-body" data-bs-toggle="collapse" href="#country3">USA</a>
-                                                        </h6>
-                                                    </div>
-
-                                                    <div id="country3" class="collapse border-top">
-                                                        <div class="card-body">
-                                                            u
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="card border shadow-none">
-                                                    <div class="card-header border-bottom-0">
-                                                        <h6 class="mb-0">
-                                                            <a class="collapsed text-body" data-bs-toggle="collapse" href="#country3">USA</a>
-                                                        </h6>
-                                                    </div>
-
-                                                    <div id="country3" class="collapse border-top">
-                                                        <div class="card-body">
-                                                            u
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="card border shadow-none">
-                                                    <div class="card-header border-bottom-0">
-                                                        <h6 class="mb-0">
-                                                            <a class="collapsed text-body" data-bs-toggle="collapse" href="#country3">USA</a>
-                                                        </h6>
-                                                    </div>
-
-                                                    <div id="country3" class="collapse border-top">
-                                                        <div class="card-body">
-                                                            u
-                                                        </div>
-                                                    </div>
-                                                </div>
 
                                             </div>
                                         </div>
@@ -353,9 +265,6 @@
                                                 </a>
                                                 <a class="text-body mx-2" data-card-action="reload">
                                                     <i class="ph-arrows-clockwise"></i>
-                                                </a>
-                                                <a class="text-body" data-card-action="remove">
-                                                    <i class="ph-x"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -382,9 +291,6 @@
                                                 <a class="text-body mx-2" data-card-action="reload">
                                                     <i class="ph-arrows-clockwise"></i>
                                                 </a>
-                                                <a class="text-body" data-card-action="remove">
-                                                    <i class="ph-x"></i>
-                                                </a>
                                             </div>
                                         </div>
 
@@ -408,11 +314,11 @@
                 <div class="card border shadow-none">
                     <div class="card-header border-bottom-0">
                         <h6 class="mb-0">
-                            <a class="collapsed text-body" data-bs-toggle="collapse" href="#collapsible-card2">Show calculations for one number:</a>
+                            <a class="text-body" data-bs-toggle="collapse" href="#collapsible-card2">Show calculations for one number:</a>
                         </h6>
                     </div>
 
-                    <div id="collapsible-card2" class="collapse border-top">
+                    <div id="collapsible-card2" class="collapse border-top show">
                         <div class="card-body">
                             Тon cupidatat skateboard dolor brunch. Тesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda.
                         </div>
@@ -422,24 +328,146 @@
                 <div class="card border shadow-none">
                     <div class="card-header border-bottom-0">
                         <h6 class="mb-0">
-                            <a class="collapsed text-body" data-bs-toggle="collapse" href="#collapsible-card3">ROI</a>
+                            <a class="text-body" data-bs-toggle="collapse" href="#collapsible-card3">ROI</a>
                         </h6>
                     </div>
 
-                    <div id="collapsible-card3" class="collapse border-top">
-                        <!-- Zoom option -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0">Zoom option</h5>
-                            </div>
+                    <div id="collapsible-card3" class="collapse border-top show">
 
+                        <div class="card">
+
+                            <div class="card-body border-top">
+                                <form action="#">
+                                    <fieldset>
+                                        <legend class="fs-base fw-bold border-bottom pb-2 mb-3">Solution details</legend>
+
+                                        <div class="row mb-3">
+                                            <label class="col-lg-3 col-form-label">Solution:</label>
+                                            <div class="col-lg-3">
+                                                <input type="text" class="form-control" value="XXXXX">
+                                            </div>
+                                            <label class="col-lg-3 col-form-label">Job date:</label>
+                                            <div class="col-lg-3">
+                                                <input type="text" class="form-control" value="06/01/2023">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label class="col-lg-3 col-form-label">Cistomer:</label>
+                                            <div class="col-lg-3">
+                                                <input type="text" class="form-control" value="Customer1">
+                                            </div>
+                                            <label class="col-lg-3 col-form-label">Period multiplier:</label>
+                                            <div class="col-lg-3">
+                                                <input type="text" class="form-control" value="0">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label class="col-lg-3 col-form-label">Period:</label>
+                                            <div class="col-lg-3">
+                                                <input type="text" class="form-control" value="06/01/2023-06/01/2025">
+                                            </div>
+                                            <label class="col-lg-3 col-form-label">ROI:</label>
+                                            <div class="col-lg-3">
+                                                <input type="text" class="form-control" value="2154$">
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+
+                                    <fieldset>
+                                        <legend class="fs-base fw-bold border-bottom pb-2 mb-3">Benefits - Fraud losses reduction</legend>
+
+                                        <div class="row mb-3">
+                                            <label class="col-lg-6 col-form-label">Amount of fraudulent transaction avoided:</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" class="form-control" value="474">
+                                            </div>
+
+                                            <label class="col-lg-6 col-form-label">Average value of fraudulent transaction:</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" class="form-control" value="15.00$">
+                                            </div>
+
+                                            <label class="col-lg-6 col-form-label">Fraud avoided by XXXX:</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" class="form-control" value="7110$">
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+
+                                    <fieldset>
+                                        <legend class="fs-base fw-bold border-bottom pb-2 mb-3">Additional cost</legend>
+
+                                        <div class="row mb-3">
+                                            <label class="col-lg-6 col-form-label">Monthly cost of Telesign solution:</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" class="form-control" value="5000$">
+                                            </div>
+
+                                            <label class="col-lg-6 col-form-label">Other costs:</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" class="form-control" value="00.00$">
+                                            </div>
+
+                                            <label class="col-lg-6 col-form-label">Total cost:</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" class="form-control" value="5000$">
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+
+                                    <fieldset>
+                                        <legend class="fs-base fw-bold border-bottom pb-2 mb-3">Additional savings</legend>
+
+                                        <div class="row mb-3">
+                                            <label class="col-lg-6 col-form-label">Cost per phone number lookup:</label>
+                                            <div class="col-lg-3">
+                                                <input type="text" class="form-control" value="0.005$">
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <input type="text" class="form-control" value="15.60$">
+                                            </div>
+
+                                            <label class="col-lg-6 col-form-label">Average SMS tansaction cost:</label>
+                                            <div class="col-lg-3">
+                                                <input type="text" class="form-control" value="0.060$">
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <input type="text" class="form-control" value="28.40$">
+                                            </div>
+
+                                            <label class="col-lg-6 col-form-label">Other savings:</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" class="form-control" value="00.00$">
+                                            </div>
+
+                                            <label class="col-lg-6 col-form-label">Total savings:</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" class="form-control" value="44.00$">
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+
+{{--                                    <div class="text-end">--}}
+{{--                                        <button type="submit" class="btn btn-primary">Submit form <i class="ph-paper-plane-tilt ms-2"></i></button>--}}
+{{--                                    </div>--}}
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="card">
                             <div class="card-body">
                                 <div class="chart-container">
                                     <div class="chart has-fixed-height" id="line_zoom"></div>
                                 </div>
                             </div>
                         </div>
-                        <!-- /zoom option -->
+
                     </div>
                 </div>
             </div>
