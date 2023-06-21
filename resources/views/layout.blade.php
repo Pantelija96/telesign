@@ -39,7 +39,7 @@
 
         <div class="navbar-brand flex-1 flex-lg-0">
             <a href="{{url('/home')}}" class="d-inline-flex align-items-center">
-                <img src="{{asset('/')}}assets/img/telesignBlueLogo.png" alt="Telesign blue logo">
+                <img src="{{asset('/')}}assets/img/telesignBlueLogo.png" alt="Telesign blue logo" class="iconSize">
             </a>
         </div>
 

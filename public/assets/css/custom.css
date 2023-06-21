@@ -48,3 +48,39 @@
     background-color: #0917a1;
     color: white;
 }
+
+
+.bg-very-low{
+    --bg-opacity:1;
+    background-color:rgba(86, 163, 76, 1);
+}
+
+.bg-low{
+    --bg-opacity:1;
+    background-color:rgba(136, 214, 128, 1);
+}
+
+.bg-medium-low{
+    --bg-opacity:1;
+    background-color:rgba(246, 203, 117, 1);
+}
+
+.bg-medium{
+    --bg-opacity:1;
+    background-color:rgba(238, 147, 40, 1);
+}
+
+.bg-high{
+    --bg-opacity:1;
+    background-color:rgba(216, 122, 128, 1);
+}
+
+.bg-very-high{
+    --bg-opacity:1;
+    background-color:rgba(225, 90, 87, 1);
+}
+
+
+.iconSize{
+    height: 40px !important;
+}

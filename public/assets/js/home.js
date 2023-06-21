@@ -13,7 +13,7 @@ const DatatableResponsive = function() {
             columnDefs: [{
                 orderable: false,
                 width: 100,
-                targets: [ 4 ]
+                targets: [ 3 ]
             }],
             dom: '<"datatable-header"fl><"datatable-scroll-wrap"t><"datatable-footer"ip>',
             language: {
@@ -607,24 +607,6 @@ var EchartsBarsStackedLight = function() {
                                 data:[320, 302, 301, 334, 390]
                             },
                             {
-                                name: 'Block',
-                                type: 'bar',
-                                stack: 'Total',
-                                itemStyle: {
-                                    normal: {
-                                        color: '#da3533',
-                                        label: {
-                                            show: true,
-                                            position: 'insideRight',
-                                            padding: [0, 10],
-                                            fontSize: 12,
-                                            fontWeight: 500
-                                        }
-                                    }
-                                },
-                                data:[120, 132, 101, 134, 120]
-                            },
-                            {
                                 name: 'Flag',
                                 type: 'bar',
                                 stack: 'Total',
@@ -641,6 +623,24 @@ var EchartsBarsStackedLight = function() {
                                     }
                                 },
                                 data:[220, 182, 191, 234]
+                            },
+                            {
+                                name: 'Block',
+                                type: 'bar',
+                                stack: 'Total',
+                                itemStyle: {
+                                    normal: {
+                                        color: '#da3533',
+                                        label: {
+                                            show: true,
+                                            position: 'insideRight',
+                                            padding: [0, 10],
+                                            fontSize: 12,
+                                            fontWeight: 500
+                                        }
+                                    }
+                                },
+                                data:[120, 132, 101, 134, 120]
                             }
                         ]
                     })
@@ -669,24 +669,6 @@ var EchartsBarsStackedLight = function() {
                                 data:[52, 33, 55, 52, 38]
                             },
                             {
-                                name: 'Block',
-                                type: 'bar',
-                                stack: 'Total',
-                                itemStyle: {
-                                    normal: {
-                                        color: '#da3533',
-                                        label: {
-                                            show: true,
-                                            position: 'insideRight',
-                                            padding: [0, 10],
-                                            fontSize: 12,
-                                            fontWeight: 500
-                                        }
-                                    }
-                                },
-                                data:[85, 52, 66, 123, 33]
-                            },
-                            {
                                 name: 'Flag',
                                 type: 'bar',
                                 stack: 'Total',
@@ -703,6 +685,24 @@ var EchartsBarsStackedLight = function() {
                                     }
                                 },
                                 data:[77, 44, 23, 72]
+                            },
+                            {
+                                name: 'Block',
+                                type: 'bar',
+                                stack: 'Total',
+                                itemStyle: {
+                                    normal: {
+                                        color: '#da3533',
+                                        label: {
+                                            show: true,
+                                            position: 'insideRight',
+                                            padding: [0, 10],
+                                            fontSize: 12,
+                                            fontWeight: 500
+                                        }
+                                    }
+                                },
+                                data:[85, 52, 66, 123, 33]
                             }
                         ]
                     })
@@ -731,24 +731,6 @@ var EchartsBarsStackedLight = function() {
                                 data:[123, 43, 99, 93, 86]
                             },
                             {
-                                name: 'Block',
-                                type: 'bar',
-                                stack: 'Total',
-                                itemStyle: {
-                                    normal: {
-                                        color: '#da3533',
-                                        label: {
-                                            show: true,
-                                            position: 'insideRight',
-                                            padding: [0, 10],
-                                            fontSize: 12,
-                                            fontWeight: 500
-                                        }
-                                    }
-                                },
-                                data:[100, 52, 123, 63, 70]
-                            },
-                            {
                                 name: 'Flag',
                                 type: 'bar',
                                 stack: 'Total',
@@ -765,6 +747,24 @@ var EchartsBarsStackedLight = function() {
                                     }
                                 },
                                 data:[66, 84, 85, 211,44]
+                            },
+                            {
+                                name: 'Block',
+                                type: 'bar',
+                                stack: 'Total',
+                                itemStyle: {
+                                    normal: {
+                                        color: '#da3533',
+                                        label: {
+                                            show: true,
+                                            position: 'insideRight',
+                                            padding: [0, 10],
+                                            fontSize: 12,
+                                            fontWeight: 500
+                                        }
+                                    }
+                                },
+                                data:[100, 52, 123, 63, 70]
                             }
                         ]
                     })
@@ -1457,6 +1457,92 @@ var EchartsLinesZoomLight = function() {
     }
 }();
 
+const DatatableAdvanced = function() {
+
+
+    //
+    // Setup module components
+    //
+
+    // Basic Datatable examples
+    const _componentDatatableAdvanced = function() {
+        if (!$().DataTable) {
+            console.warn('Warning - datatables.min.js is not loaded.');
+            return;
+        }
+
+        // Setting datatable defaults
+        $.extend( $.fn.dataTable.defaults, {
+            autoWidth: false,
+            columnDefs: [{
+                orderable: false,
+                width: 100,
+                targets: [ 5 ]
+            }],
+            dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+            language: {
+                search: '<span class="me-3">Filter:</span> <div class="form-control-feedback form-control-feedback-end flex-fill">_INPUT_<div class="form-control-feedback-icon"><i class="ph-magnifying-glass opacity-50"></i></div></div>',
+                searchPlaceholder: 'Type to filter...',
+                lengthMenu: '<span class="me-3">Show:</span> _MENU_',
+                paginate: { 'first': 'First', 'last': 'Last', 'next': document.dir == "rtl" ? '&larr;' : '&rarr;', 'previous': document.dir == "rtl" ? '&rarr;' : '&larr;' }
+            }
+        });
+
+
+        // Datatable 'length' options
+        $('.datatable-show-all').DataTable({
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+        });
+
+        // DOM positioning
+        $('.datatable-dom-position').DataTable({
+            dom: '<"datatable-header length-left"lp><"datatable-scroll"t><"datatable-footer info-right"fi>',
+        });
+
+        // Highlighting rows and columns on mouseover
+        const lastIdx = null;
+        const table = $('.datatable-highlight').DataTable();
+
+        $('.datatable-highlight tbody').on('mouseover', 'td', function() {
+            const colIdx = table.cell(this).index().column;
+
+            if (colIdx !== lastIdx) {
+                $(table.cells().nodes()).removeClass('active');
+                $(table.column(colIdx).nodes()).addClass('active');
+            }
+        }).on('mouseleave', function() {
+            $(table.cells().nodes()).removeClass('active');
+        });
+
+        // Columns rendering
+        $('.datatable-columns').dataTable({
+            columnDefs: [
+                {
+                    // The `data` parameter refers to the data for the cell (defined by the
+                    // `data` option, which defaults to the column being worked with, in
+                    // this case `data: 0`.
+                    render: function (data, type, row) {
+                        return data +' ('+ row[3]+')';
+                    },
+                    targets: 0
+                },
+                { visible: false, targets: [ 3 ] }
+            ]
+        });
+    };
+
+
+    //
+    // Return objects assigned to module
+    //
+
+    return {
+        init: function() {
+            _componentDatatableAdvanced();
+        }
+    }
+}();
+
 document.addEventListener('DOMContentLoaded', function() {
     DatatableResponsive.init();
     EchartsMapWorldScatter.init();
@@ -1464,6 +1550,7 @@ document.addEventListener('DOMContentLoaded', function() {
     EchartsPieBasicLight.init();
     EchartsPieDonutLight.init();
     EchartsLinesZoomLight.init();
+    DatatableAdvanced.init();
 
     $("#addToTable").click(function(){
 
