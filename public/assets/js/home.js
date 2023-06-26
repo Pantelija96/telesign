@@ -49,11 +49,6 @@ var EchartsMapWorldScatter = function() {
             // Initialize chart
             var map_world_scatter = echarts.init(map_world_scatter_element, null, { renderer: 'svg' });
 
-
-            //
-            // Chart config
-            //
-
             // Country coordinates
             var latlong = {};
             latlong.AD = {'latitude':42.5, 'longitude':1.5};
@@ -428,14 +423,12 @@ var EchartsMapWorldScatter = function() {
                 ]
             });
 
-            map_world_scatter.on('click', function(params) {
-                // alert(params.name);
-                // if(params.name === "Russia"){
-                //     $("input[id*='countryRussia']").each(function (i, el) {
-                //         //It'll be an array of elements
-                //     });
-                // }
-            });
+            // map_world_scatter.on('click', function(params) {
+            //     alert(params.name);
+            //     if(params.name === "Russia"){
+                    
+            //     }
+            // });
         }
 
         var triggerChartResize = function() {
@@ -1045,7 +1038,7 @@ var EchartsPieBasicLight = function() {
 
                 // Add series
                 series: [{
-                    name: 'Numbers to:',
+                    name: 'Numbers to',
                     type: 'pie',
                     radius: '70%',
                     center: ['50%', '57.5%'],
@@ -1056,9 +1049,9 @@ var EchartsPieBasicLight = function() {
                         color: 'var(--body-color)'
                     },
                     data: [
-                        {value: 335, name: 'Allow'},
-                        {value: 310, name: 'Flag'},
-                        {value: 234, name: 'Block'},
+                        {value: 335, name: 'Allow 38.11%'},
+                        {value: 310, name: 'Flag 35.27%'},
+                        {value: 234, name: 'Block 26.62%'},
                     ]
                 }]
             });
@@ -1327,7 +1320,7 @@ var EchartsLinesZoomLight = function() {
                             color: 'var(--gray-300)'
                         }
                     },
-                    data: ['2020','2021','2022','2023','2024','2025']
+                    data: ['2020','2021','3/2021','2022','2023', '2004', '2005']
                 }],
 
                 // Vertical axis
@@ -1403,7 +1396,7 @@ var EchartsLinesZoomLight = function() {
                         smooth: true,
                         symbol: 'circle',
                         symbolSize: 8,
-                        data: [5000,5000,5000,5000,5000]
+                        data: [5000,5000,5000,5000,5000,5000]
                     },
                     {
                         name: 'Savings',
@@ -1411,7 +1404,7 @@ var EchartsLinesZoomLight = function() {
                         smooth: true,
                         symbol: 'circle',
                         symbolSize: 8,
-                        data: [1000,3000,6000,9000,13000]
+                        data: [1000,3000,5000,7000,9000,11000]
                     }
                 ]
             });
