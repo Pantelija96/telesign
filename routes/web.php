@@ -5,8 +5,20 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\BackendController;
 
 
+
+Route::get('/logout', [BackendController::class, 'logout']);
+
+
 Route::get('/', [FrontendController::class, 'showLogin']);
-Route::get('/home/{uploadedCsv?}', [FrontendController::class, 'showHome']);
+Route::get('/home/{uploadedCsv?}', [FrontendController::class, 'showHome'])->middleware('basicAuth');
 Route::get('/roi', [FrontendController::class, 'showRoi']);
 
+
+Route::get('/mongo', [FrontendController::class, 'mongo']);
+
+
+
 Route::post('/uploadnumbercsv', [BackendController::class, 'uploadNumberCsv'])->name('uploadNumbersCsv');
+Route::post('/login', [BackendController::class, 'login'])->name('login');
+
+

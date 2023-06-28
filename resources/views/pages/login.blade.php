@@ -16,15 +16,18 @@
 
     <!-- Core JS files -->
     <script src="{{asset('/')}}assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="{{asset('/')}}assets/js/vendor/notifications/noty.min.js"></script>
     <!-- /core JS files -->
 
     <!-- Theme JS files -->
     <script src="{{asset('/')}}assets/js/app.js"></script>
+{{--    <script src="{{asset('/')}}assets/js/pages/login.js"></script>--}}
     <!-- /theme JS files -->
+
+
 
 </head>
 <body>
-
 <!-- Main navbar -->
 <div class="navbar navbar-static py-2" style="background-color: #202125;">
     <div class="container-fluid">
@@ -55,11 +58,13 @@
         <!-- Inner content -->
         <div class="content-inner">
 
+
             <!-- Content area -->
             <div class="content d-flex justify-content-center align-items-center">
 
                 <!-- Login form -->
-                <form class="login-form" action="index.html">
+                <form class="login-form" action="{{route('login')}}" method="POST">
+                    {{csrf_field()}}
                     <div class="card mb-0">
                         <div class="card-body">
                             <div class="text-center mb-3">
@@ -72,7 +77,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Username</label>
                                 <div class="form-control-feedback form-control-feedback-start">
-                                    <input type="text" class="form-control" placeholder="Username">
+                                    <input type="text" name="username" class="form-control" placeholder="Username">
                                     <div class="form-control-feedback-icon">
                                         <i class="ph-user-circle text-muted"></i>
                                     </div>
@@ -82,7 +87,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Password</label>
                                 <div class="form-control-feedback form-control-feedback-start">
-                                    <input type="password" class="form-control" placeholder="•••••••••••">
+                                    <input type="password" name="password" class="form-control" placeholder="•••••••••••">
                                     <div class="form-control-feedback-icon">
                                         <i class="ph-lock text-muted"></i>
                                     </div>
@@ -90,8 +95,7 @@
                             </div>
 
                             <div class="mb-3">
-{{--                                <button type="submit" class="btn btn-telesign w-100">Sign in</button>--}}
-                                <a href="{{url('/home')}}" class="btn btn-telesign w-100">Sign in</a>
+                                <button type="submit" class="btn btn-telesign w-100">Sign in</button>
                             </div>
 
                             <div class="text-center">
@@ -109,10 +113,30 @@
         <!-- /inner content -->
 
     </div>
-    <!-- /main content -->
 
 </div>
-<!-- /page content -->
 
+@if(isset($errorCode))
+    <script>
+        var errorCode = {{$errorCode}};
+        var errorMsg = "{{$errorMsg}}";
+
+        document.addEventListener('DOMContentLoaded', function() {
+            Noty.overrideDefaults({
+                theme: 'limitless',
+                layout: 'topRight',
+                type: 'alert',
+                timeout: 2500
+            });
+
+            new Noty({
+                text: errorMsg,
+                type: errorCode === 1 ? 'error': 'warning',
+                modal: true
+            }).show();
+        });
+
+    </script>
+@endif
 </body>
 </html>

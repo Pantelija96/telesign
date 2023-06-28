@@ -49,6 +49,11 @@
     color: white;
 }
 
+.btn-telesign:hover{
+    background-color: #1e33ea;
+    color: white;
+}
+
 
 .bg-very-low{
     --bg-opacity:1;

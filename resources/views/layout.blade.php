@@ -49,7 +49,7 @@
 
             <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2">
                 <a href="#" class="navbar-nav-link align-items-center rounded-pill p-1" data-bs-toggle="dropdown">
-                    <i class="ph-user-square ph-2x me-1"></i><span class="d-lg-inline-block mx-lg-2">Pantelija</span>
+                    <i class="ph-user-square ph-2x me-1"></i><span class="d-lg-inline-block mx-lg-2">{{session()->all()['user']['name']." ".session()->all()['user']['last_name']}}</span>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
@@ -63,7 +63,7 @@
                         <span class="badge bg-primary rounded-pill ms-auto">26</span>
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
+                    <a href="{{url('/logout')}}" class="dropdown-item">
                         <i class="ph-sign-out me-2"></i>
                         Logout
                     </a>
