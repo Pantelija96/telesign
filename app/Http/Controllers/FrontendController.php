@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Korisnik;
+use App\Models\Project;
 use Illuminate\Http\Request;
+use MongoDB\BSON\ObjectID;
 
 class FrontendController extends Controller
 {
@@ -17,6 +19,46 @@ class FrontendController extends Controller
             session()->flush();
         }
         return view('pages.login', $this->data);
+    }
+
+    public function home($view = 0){
+        //view = 0 => grid view
+        $this->data['view'] = $view;
+        return view('pages.homeProjects', $this->data);
+    }
+
+    public function project($id = null){
+        $project = new Project();
+        if($id == null){
+            //new project
+            $project->saved = false;
+            $project->numbers = [
+                [
+                    'number' => 11123,
+                    'ip' => '1.1.1.1',
+                    'email' => 'email1@test.com',
+                    '_id' => new ObjectID()
+                ],
+                [
+                    'number' => 22223,
+                    'ip' => '2.2.2.2',
+                    'email' => '',
+                    '_id' => new ObjectID()
+                ],
+                [
+                    'number' => 33323,
+                    'ip' => '3.3.3.3',
+                    'email' => 'email3@test.com',
+                    '_id' => new ObjectID()
+                ],
+            ];
+            $project->save();
+            return redirect('/project/'.$project->id);
+        }
+        else{
+            $this->data['project'] = $project->where('_id', $id)->first();
+            return view('pages.project', $this->data);
+        }
     }
 
     public function showHome($uploadedCsv = null){

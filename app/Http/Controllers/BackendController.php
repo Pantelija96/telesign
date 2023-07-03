@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use App\Http\Controllers\FrontendController;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\LazyCollection;
+use MongoDB\BSON\ObjectId;
 
 
 class BackendController extends Controller
@@ -46,6 +49,101 @@ class BackendController extends Controller
             'errorMsg' => 'User not found!'
         ]);
     }
+
+    public function addNewNumber(Request $request){
+        $number = $request->get('number');
+        $email = $request->get('email');
+        $ip = $request->get('ip');
+        $id = $request->get('id');
+
+        $obj = [
+            'number' => $number,
+            'email' => $email,
+            'ip' => $ip,
+            '_id' => new ObjectID()
+        ];
+
+        $response = Project::where('_id', '=', $id)->push('numbers', array($obj));
+
+        if($response){
+            return response()->json(array(['msg'=> "Successfully added!", "_id" => $obj['_id']]), 200);
+        }
+        else{
+            return response()->json(array('msg'=> "Some error occurred!"), 500);
+        }
+    }
+
+    public function editNumber(Request $request){
+        //return response()->json(array(['msg'=> "Some error occurred!", 'error' => $request->all()]), 500);
+        $number = $request->get('number');
+        $email = $request->get('email');
+        $ip = $request->get('ip');
+        $id = $request->get('id');
+        $numberId = $request->get('numberId');
+
+        $response = Project::where('_id','=',$id)
+            ->where('numbers._id','=',$numberId)
+            ->update([
+                'numbers.$.number' => $number,
+                'numbers.$.ip' => $ip,
+                'numbers.$.email' => $email
+            ]);
+
+        if($response){
+            return response()->json(array(['msg'=> "Successfully added!", "numberId" => $numberId]), 200);
+        }
+        else{
+            return response()->json(array(['msg'=> "Some error occurred!", 'error' => $response]), 500);
+        }
+    }
+
+    public function uploadCsv(Request $request){
+        //return dd($request->all());
+        $request->validate([
+            'csvFile' => 'required',
+            'projectId' => 'required'
+        ]);
+
+        $path = $request->file('csvFile')->store('temp');
+        $file = $request->file('csvFile');
+        $fileName = str_replace(" ","_", time().$file->getClientOriginalName());
+        $file->move(public_path('csvUploads'), $fileName);
+
+        $csvFile = file(public_path('csvUploads/'.$fileName));
+        $dataArray = [];
+        foreach ($csvFile as $line) {
+            $obj = [
+                'number' => str_getcsv($line)[0],
+                'email' => "",
+                'ip' => "",
+                '_id' => new ObjectID()
+            ];
+            $dataArray[] = $obj;
+        }
+        array_shift($dataArray);
+
+        $response = Project::where('_id', '=', $request->get('projectId'))->push('numbers', $dataArray);
+
+        return redirect()->action(
+            [FrontendController::class, 'project'], ['id' => $request->get('projectId')]
+        );
+
+
+
+//        LazyCollection::make(function () use ($fileName) {
+//            $file = fopen(public_path('csvUploads/'.$fileName), 'r');
+//            while ($data = fgetcsv($file)) {
+//                yield $data;
+//            }
+//        })->skip(1)->each(function ($data) {
+//            // Process csv row
+//            var_dump($data);
+//        });
+    }
+
+
+
+
 
 
     public function uploadNumberCsv(Request $request){

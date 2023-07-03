@@ -7,6 +7,14 @@ use App\Http\Controllers\BackendController;
 
 
 Route::get('/logout', [BackendController::class, 'logout']);
+Route::get('/addNewNumber', [BackendController::class, 'addNewNumber']);
+Route::get('/editNumber', [BackendController::class, 'editNumber']);
+Route::post('/uploadCsv', [BackendController::class, 'uploadCsv'])->name('uploadCsv');
+
+
+
+Route::get('/home2/{view?}', [FrontendController::class, 'home']);
+Route::get('/project/{id?}', [FrontendController::class, 'project']);
 
 
 Route::get('/', [FrontendController::class, 'showLogin']);
