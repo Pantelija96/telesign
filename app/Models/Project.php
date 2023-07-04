@@ -13,9 +13,12 @@ class Project extends Eloquent
 
     protected $fillable = [
         'name',
+        'description',
         'price',
         'numbers',
-        'saved'
+        'saved',
+        'owner',
+        'seeOnly',//users that will only be able to see the project
     ];
 
 

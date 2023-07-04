@@ -105,94 +105,112 @@
                 <span class="p-2">New / unopened</span>
             </div>
             <div class="row">
-                <div class="col-lg-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex mb-3">
-                                <div class="d-inline-flex">
-                                    <span class="badge bg-danger me-2">New</span>
-                                </div>
+                @if(count($newProjects) > 0)
+                    @foreach($newProjects as $newProject)
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex mb-3">
+                                        <div class="d-inline-flex">
+                                            @if(!$newProject['opened'])
+                                                <span class="badge bg-warning me-2">New</span>
+                                            @else
+                                                <span class="badge bg-success me-2">Opened</span>
+                                            @endif
+                                            @if(!$newProject['owner'])
+                                                <span class="badge bg-indigo me-2">Read only</span>
+                                            @else
+                                                <span class="badge bg-primary me-2">Owner</span>
+                                            @endif
+                                        </div>
 
-                                <div class="dropdown ms-auto">
-                                    <a href="#" class="text-body" data-bs-toggle="dropdown">
-                                        <i class="ph-gear"></i>
-                                    </a>
+                                        <div class="dropdown ms-auto">
+                                            <a href="#" class="text-body" data-bs-toggle="dropdown">
+                                                <i class="ph-gear"></i>
+                                            </a>
 
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a href="#" class="dropdown-item"><i class="ph-calendar-check me-2"></i> Check</a>
-                                        <a href="#" class="dropdown-item"><i class="ph-x me-2"></i> Remove / don't show me</a>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a href="#" class="dropdown-item"><i class="ph-calendar-check me-2"></i> Check</a>
+                                                <a href="#" class="dropdown-item"><i class="ph-x me-2"></i> Remove / don't show me</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h6 class="mb-1"><a href="#">{{$newProject['projectName']}}</a></h6>
+                                        <p class="mb-2">{{$newProject['projectDescription']}}</p>
+                                    </div>
+
+                                    <div class="d-sm-flex align-items-sm-center flex-sm-wrap">
+                                        <div class="d-flex flex-wrap">
+                                            <div><span class="text-muted"><i class="ph-calendar me-1"></i>{{date('d.m.Y', strtotime($newProject['date']))}}</span></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div>
-                                <h6 class="mb-1"><a href="#">Full project name</a></h6>
-                                <p class="mb-2">Project description</p>
-                            </div>
-
-                            <div class="d-sm-flex align-items-sm-center flex-sm-wrap">
-                                <div class="d-flex flex-wrap">
-                                    <div><span class="text-muted"><i class="ph-calendar me-1"></i> 28.06.2022</span></div>
-                                </div>
-                            </div>
                         </div>
-                    </div>
-                </div>
+                    @endforeach
+                @else
+                    <h3>No new projects!</h3>
+                @endif
+
+
             </div>
 
             <div class="text-center text-muted content-divider mb-3">
                 <span class="p-2">Old / opened</span>
             </div>
+
             <div class="row">
-                <div class="col-lg-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex mb-3">
-                            <div class="d-inline-flex">
-                                <span class="badge bg-success me-2">Opened</span>
-                            </div>
+                @if(count($openedProjects) > 0)
+                    @foreach($openedProjects as $openedProject)
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex mb-3">
+                                        <div class="d-inline-flex">
+                                            @if($openedProject['opened'])
+                                                <span class="badge bg-success me-2">Opened</span>
+                                            @else
+                                                <span class="badge bg-warning me-2">New</span>
+                                            @endif
+                                            @if($openedProject['owner'])
+                                                <span class="badge bg-primary me-2">Owner</span>
+                                            @else
+                                                <span class="badge bg-indigo me-2">Read only</span>
+                                            @endif
+                                        </div>
 
-                            <div class="dropdown ms-auto">
-                                <a href="#" class="text-body" data-bs-toggle="dropdown">
-                                    <i class="ph-gear"></i>
-                                </a>
+                                        <div class="dropdown ms-auto">
+                                            <a href="#" class="text-body" data-bs-toggle="dropdown">
+                                                <i class="ph-gear"></i>
+                                            </a>
 
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a href="#" class="dropdown-item"><i class="ph-calendar-check me-2"></i> Check</a>
-                                    <a href="#" class="dropdown-item"><i class="ph-x me-2"></i> Remove / don't show me</a>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a href="#" class="dropdown-item"><i class="ph-calendar-check me-2"></i> Check</a>
+                                                <a href="#" class="dropdown-item"><i class="ph-x me-2"></i> Remove / don't show me</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h6 class="mb-1"><a href="#">{{$openedProject['projectName']}}</a></h6>
+                                        <p class="mb-2">{{$openedProject['projectDescription']}}</p>
+                                    </div>
+
+                                    <div class="d-sm-flex align-items-sm-center flex-sm-wrap">
+                                        <div class="d-flex flex-wrap">
+                                            <div><span class="text-muted"><i class="ph-calendar me-1"></i> {{date('d.m.Y', strtotime($openedProject['date']))}}</span></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    @endforeach
+                @endif
 
-                        <div>
-                            <h6 class="mb-1"><a href="#">Full project name</a></h6>
-                            <p class="mb-2">Project description</p>
-                        </div>
-
-                        <div class="d-sm-flex align-items-sm-center flex-sm-wrap">
-                            <div class="d-flex flex-wrap">
-                                <div><span class="text-muted"><i class="ph-calendar me-1"></i> 28.06.2022</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             </div>
             <!-- /task grid -->
-
-            <!-- Pagination -->
-            <div class="d-flex justify-content-center mt-3 mb-3">
-                <ul class="pagination">
-                    <li class="page-item"><a href="#" class="page-link"><i class="ph-arrow-left"></i></a></li>
-                    <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link"><i class="ph-arrow-right"></i></a></li>
-                </ul>
-            </div>
-            <!-- /pagination -->
         @elseif($view == 1)
             <div class="navbar navbar-expand-lg shadow rounded py-1 mb-3">
                     <div class="container-fluid">
@@ -242,12 +260,24 @@
                     </tr>
                     </thead>
                     <tbody>
+                    @foreach($allProjects as $project)
                         <tr>
-                            <td>1</td>
-                            <td>Full project name</td>
-                            <td>Short project description</td>
-                            <td><span class="badge bg-danger me-2">New</span></td>
-                            <td><a href="#">2011/04/25</a></td>
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$project['projectName']}}</td>
+                            <td>{{$project['projectDescription']}}</td>
+                            <td>
+                                @if($project['opened'])
+                                    <span class="badge bg-success me-2">Opened</span>
+                                @else
+                                    <span class="badge bg-warning me-2">New</span>
+                                @endif
+                                @if($project['owner'])
+                                    <span class="badge bg-primary me-2">Owner</span>
+                                @else
+                                    <span class="badge bg-indigo me-2">Read only</span>
+                                @endif
+                            </td>
+                            <td><a href="#">{{date('d.m.Y', intval($project['date']))}}</a></td>
                             <td class="text-center">
                                 <div class="d-inline-flex">
                                     <div class="dropdown">
@@ -263,27 +293,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Full project name</td>
-                            <td>Short project description</td>
-                            <td><span class="badge bg-success me-2">Opened</span></td>
-                            <td><a href="#">2011/04/25</a></td>
-                            <td class="text-center">
-                                <div class="d-inline-flex">
-                                    <div class="dropdown">
-                                        <a href="#" class="text-body" data-bs-toggle="dropdown">
-                                            <i class="ph-list"></i>
-                                        </a>
-
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="#" class="dropdown-item"><i class="ph-calendar-check me-2"></i> Check</a>
-                                            <a href="#" class="dropdown-item"><i class="ph-x me-2"></i> Remove / don't show me</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </div>

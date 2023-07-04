@@ -15,7 +15,11 @@ class User extends Eloquent
     protected $collection = 'user';
     protected $guarded = [];
     protected $fillable = [
-        'id', 'email', 'password', 'username'
+        'id',
+        'email',
+        'password',
+        'username',
+        'projects'
     ];
 
 }
