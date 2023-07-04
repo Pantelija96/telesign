@@ -90,7 +90,25 @@ class BackendController extends Controller
             ]);
 
         if($response){
-            return response()->json(array(['msg'=> "Successfully added!", "numberId" => $numberId]), 200);
+            return response()->json(array(['msg'=> "Successfully edited!", "numberId" => $numberId]), 200);
+        }
+        else{
+            return response()->json(array(['msg'=> "Some error occurred!", 'error' => $response]), 500);
+        }
+    }
+
+    public function deleteNumber(Request $request){
+        $id = $request->get('id');
+        $numberId = $request->get('numberId');
+
+
+        $response = Project::where('_id','=',$id)
+            ->pull('numbers', [
+                '_id' => new ObjectId($numberId)
+            ]);
+
+        if($response){
+            return response()->json(array(['msg'=> "Successfully deleted number!", "numberId" => $numberId]), 200);
         }
         else{
             return response()->json(array(['msg'=> "Some error occurred!", 'error' => $response]), 500);

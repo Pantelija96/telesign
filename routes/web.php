@@ -9,6 +9,7 @@ use App\Http\Controllers\BackendController;
 Route::get('/logout', [BackendController::class, 'logout']);
 Route::get('/addNewNumber', [BackendController::class, 'addNewNumber']);
 Route::get('/editNumber', [BackendController::class, 'editNumber']);
+Route::get('/deleteNumber', [BackendController::class, 'deleteNumber']);
 Route::post('/uploadCsv', [BackendController::class, 'uploadCsv'])->name('uploadCsv');
 
 

@@ -2,6 +2,16 @@ document.addEventListener('DOMContentLoaded', function() {
     initDataTable();
 });
 
+const swalInit = swal.mixin({
+    buttonsStyling: false,
+    customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-light',
+        denyButton: 'btn btn-light',
+        input: 'form-control'
+    }
+});
+
 var table = null;
 
 function initDataTable(){
@@ -63,6 +73,43 @@ function editThisNumber (number, projectID){
     add = false;
 }
 
+function deleteThisNumber (numberId, projectID, number){
+
+    swalInit.fire({
+        title: 'Are you sure?',
+        text: 'Are you sure you want to delete this number?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!'
+    }).then((confirmed) => {
+        if (confirmed.isConfirmed) {
+            $.ajax({
+                type:'GET',
+                url:'/deleteNumber',
+                data:{
+                    numberId: numberId,
+                    id: projectID
+                },
+                success:function(data) {
+                    var removingRow = $("#iteration"+number).parent();
+                    table.row(removingRow).remove().draw(false);
+                    sweetAlert(data[0].msg, "Success", 'success');
+                },
+                error: function (error){
+                    sweetAlert('Some unexpected error happened!', "Error", 'error');
+                    console.log(error);
+                }
+            });
+        }
+    });
+
+
+}
+
+function  test(){
+    alert('test');
+}
+
 function addEdit(){
 
     var number = $("#newNumber").val();
@@ -99,7 +146,7 @@ function addEdit(){
                                     <i class="ph-pencil-simple me-2"></i>
                                     Edit
                                 </a>
-                                <a href="#" class="dropdown-item text-danger">
+                                <a href="#" class="dropdown-item text-danger" onclick="deleteThisNumber('`+data[0]._id.$oid+`', '`+projectId+`', '`+number+`')">
                                     <i class="ph-x me-2"></i>
                                     Remove
                                 </a>
@@ -111,7 +158,7 @@ function addEdit(){
                         </div>
                     </div>
                     <input type="hidden" id="_id`+number+`" value="`+data[0]._id.$oid+`"/>
-                `]).draw()
+                `]).draw(false)
                     .nodes()
                     .to$()
                     .find('td')
@@ -195,7 +242,7 @@ function addEdit(){
                     <input type="hidden" id="_id`+number+`" value="`+data[0].numberId+`"/>
                 ` ];
                 table.row((someId-1)).data( newData )
-                    .draw()
+                    .draw(false)
                     .nodes()
                     .to$()
                     .find('td')
@@ -263,17 +310,6 @@ function sweetAlert(message, title, type){
         alert('Some error happened!');
         return;
     }
-
-    // Defaults
-    const swalInit = swal.mixin({
-        buttonsStyling: false,
-        customClass: {
-            confirmButton: 'btn btn-primary',
-            cancelButton: 'btn btn-light',
-            denyButton: 'btn btn-light',
-            input: 'form-control'
-        }
-    });
 
     swalInit.fire({
         title: title,

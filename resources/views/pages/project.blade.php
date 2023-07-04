@@ -137,7 +137,7 @@
                                                         <i class="ph-pencil-simple me-2"></i>
                                                         Edit
                                                     </a>
-                                                    <a href="#" class="dropdown-item text-danger">
+                                                    <a href="#" class="dropdown-item text-danger" onclick="deleteThisNumber('{{$row['_id']}}', '{{$project['_id']}}', '{{$row['number']}}')">
                                                         <i class="ph-x me-2"></i>
                                                         Remove
                                                     </a>
