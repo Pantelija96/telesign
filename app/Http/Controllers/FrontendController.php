@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Korisnik;
+use App\Models\Number;
 use App\Models\Project;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID;
+use function PHPUnit\Framework\isEmpty;
 
 class FrontendController extends Controller
 {
@@ -56,7 +58,7 @@ class FrontendController extends Controller
             //new project
             $project->saved = false;
             $project->owner = session()->get('user')['_id'];
-            $project->seeOnly = [];
+            $project->projectScore = [];
             $project->name = "Generic name";
             $project->description = "Generic desc";
             $project->save();
@@ -78,10 +80,10 @@ class FrontendController extends Controller
         }
         else{
             $this->data['project'] = $project->where('_id', $id)->first();
+            $this->data['numbers'] = Number::where('projectId', $id)->get();
+            $this->data['scored'] = empty(!$this->data['project']['projectScore']);
             return view('pages.project', $this->data);
         }
-
-
 
 //            $project->numbers = [
 //                [
@@ -104,6 +106,14 @@ class FrontendController extends Controller
 //                ],
 //            ];
     }
+
+    public function profile($id){
+        $user = new User();
+        $this->data['userData'] = $user->where('_id', $id)->first();
+        return view('pages.profileSettings', $this->data);
+    }
+
+
 
     public function showHome($uploadedCsv = null){
 //        return dd(session()->all()['user']['password']);

@@ -11,11 +11,15 @@ Route::get('/addNewNumber', [BackendController::class, 'addNewNumber']);
 Route::get('/editNumber', [BackendController::class, 'editNumber']);
 Route::get('/deleteNumber', [BackendController::class, 'deleteNumber']);
 Route::post('/uploadCsv', [BackendController::class, 'uploadCsv'])->name('uploadCsv');
+Route::post('/editUser', [BackendController::class, 'editUser'])->name('editUser');
+Route::post('/scoreNumbers', [BackendController::class, 'scoreNumbersTimeTesting'])->name('scoreNumbers');
+Route::get('/deleteProjects', [BackendController::class, 'deleteProjects']);
 
 
 
 Route::get('/home2/{view?}', [FrontendController::class, 'home']);
 Route::get('/project/{id?}', [FrontendController::class, 'project']);
+Route::get('/profile/{id}', [FrontendController::class, 'profile']);
 
 
 Route::get('/', [FrontendController::class, 'showLogin']);

@@ -11,6 +11,8 @@
 @section('additionalThemeJS')
     <script src="{{asset('/')}}assets/js/vendor/tables/datatables/datatables.min.js"></script>
     <script src="{{asset('/')}}assets/js/vendor/notifications/sweet_alert.min.js"></script>
+    <script src="{{asset('/')}}assets/js/vendor/visualization/echarts/echarts.min.js"></script>
+    <script src="{{asset('/')}}assets/js/vendor/maps/echarts/world.js"></script>
 @endsection
 
 @section('additionalPageJS')
@@ -118,13 +120,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @if(isset($project['numbers']) && count($project['numbers']) > 0)
-                            @foreach($project['numbers'] as $row)
-                                <tr id="row{{$row['number']}}">
-                                    <td id="iteration{{$row['number']}}">{{$loop->iteration}} </td>
-                                    <td id="number{{$row['number']}}">{{$row['number']}}</td>
-                                    <td id="ip{{$row['number']}}">{{$row['ip']}}</td>
-                                    <td id="email{{$row['number']}}">{{$row['email']}}</td>
+                        @if(isset($numbers) && count($numbers) > 0)
+                            @foreach($numbers as $row)
+                                <tr id="row{{$row['_id']}}">
+                                    <td id="iteration{{$row['_id']}}">{{$loop->iteration}} </td>
+                                    <td id="number{{$row['_id']}}">{{$row['number']}}</td>
+                                    <td id="ip{{$row['_id']}}">{{$row['ip']}}</td>
+                                    <td id="email{{$row['_id']}}">{{$row['email']}}</td>
                                     <td class="text-center">
                                         <div class="d-inline-flex">
                                             <div class="dropdown">
@@ -133,15 +135,15 @@
                                                 </a>
 
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="#" class="dropdown-item text-primary" onclick="editThisNumber('{{$row['number']}}', '{{$project['_id']}}')">
+                                                    <a href="#" class="dropdown-item text-primary" onclick="editThisNumber('{{$row['_id']}}', '{{$row['number']}}')">
                                                         <i class="ph-pencil-simple me-2"></i>
                                                         Edit
                                                     </a>
-                                                    <a href="#" class="dropdown-item text-danger" onclick="deleteThisNumber('{{$row['_id']}}', '{{$project['_id']}}', '{{$row['number']}}')">
+                                                    <a href="#" class="dropdown-item text-danger" onclick="deleteThisNumber('{{$row['_id']}}')">
                                                         <i class="ph-x me-2"></i>
                                                         Remove
                                                     </a>
-                                                    <a href="#" class="dropdown-item text-success">
+                                                    <a href="#" class="dropdown-item text-success" onclick="showThisNumber('{{$row['_id']}}')">
                                                         <i class="ph-chart-bar me-2"></i>
                                                         Show stats for this number
                                                     </a>
@@ -149,7 +151,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <input type="hidden" id="_id{{$row['number']}}" value="{{$row['_id']}}"/>
+                                    <input type="hidden" id="_id{{$row['_id']}}" value="{{$row['_id']}}"/>
                                 </tr>
                             @endforeach
                         @endif
@@ -160,11 +162,77 @@
 
             </div>
             <div class="card-footer d-sm-flex justify-content-end align-items-sm-center py-sm-2">
-                <button type="button" class="btn btn-primary mt-3 mt-sm-0 w-100 w-sm-auto">
-                    <i class="ph-gear-six me-2"></i>
-                    SCORE
-                </button>
+                <form method="POST" action="{{route('scoreNumbers')}}" id="scoreForm">
+                    {{csrf_field()}}
+                    <input type="hidden" name="projectId" value="{{$project['_id']}}">
+                    <button type="button" class="btn btn-primary mt-3 mt-sm-0 w-100 w-sm-auto" onclick="checkBeforeSubmit()">
+                        <i class="ph-gear-six me-2"></i>
+                        SCORE
+                    </button>
+                </form>
             </div>
         </div>
     </div>
+
+
+    @if($scored)
+        <div class="py-2 mb-3">
+            <h3 class="mb-0">Scoring result</h3>
+        </div>
+
+        <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-lg-2">
+            <li class="nav-item"><a href="#" class="nav-link active" onclick="showAllNumberScores()">All numbers</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" onclick="showOneNumberScores(0)">One number</a></li>
+        </ul>
+
+        <div id="allNumbersScore">
+            <div class="row">
+                <div id="countriesMap">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Scattering of numbers</h5>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="map-container map-echarts" id="worldNumberScatter"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            all numbers for all countires
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            pie chart1
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            pie chart 2
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var projectScore =  JSON.parse(`<?php Print($project); ?>`);
+            var numbersScore = JSON.parse(`<?php Print($numbers); ?>`);
+
+            mapInit(projectScore.projectScore);
+            $("#countriesData").height($("#countriesMap").height());
+        </script>
+    @endif
 @endsection

@@ -53,14 +53,14 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                    <a href="#" class="dropdown-item">
+                    <a href="{{url('/profile').'/'.session()->get('user')['_id']}}" class="dropdown-item @yield('profile')">
                         <i class="ph-user-circle me-2"></i>
                         My profile
                     </a>
                     <a href="#" class="dropdown-item">
                         <i class="ph-envelope-open me-2"></i>
-                        My inbox
-                        <span class="badge bg-primary rounded-pill ms-auto">26</span>
+                        New projects
+                        <span class="badge bg-warning rounded-pill ms-auto">26</span>
                     </a>
                     <div class="dropdown-divider"></div>
                     <a href="{{url('/logout')}}" class="dropdown-item">
