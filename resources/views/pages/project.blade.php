@@ -13,6 +13,8 @@
     <script src="{{asset('/')}}assets/js/vendor/notifications/sweet_alert.min.js"></script>
     <script src="{{asset('/')}}assets/js/vendor/visualization/echarts/echarts.min.js"></script>
     <script src="{{asset('/')}}assets/js/vendor/maps/echarts/world.js"></script>
+    <script src="{{asset('/')}}assets/js/vendor/visualization/d3/d3v5.min.js"></script>
+    <script src="{{asset('/')}}assets/js/vendor/visualization/c3/c3.min.js"></script>
 @endsection
 
 @section('additionalPageJS')
@@ -203,24 +205,56 @@
             <div class="row">
                 <div class="col-lg-4">
                     <div class="card">
-                        <div class="card-body text-center">
-                            all numbers for all countires
+                        <div class="card-header">
+                            <h5 class="mb-0">Countries</h5>
+                        </div>
+                        <div class="card-body text-center" style="overflow-x: hidden; overflow-y: scroll; height: 355px;">
+
+                            <div class="card-group-vertical" id="allCountries">
+                                @foreach($project['projectScore']['countryAndPhoneType'] as $country)
+
+                                    <div class="card border shadow-none">
+                                        <div class="card-header">
+                                            <h6 class="mb-0">
+                                                <a data-bs-toggle="collapse" class="d-flex align-items-center text-body countriesLink" href="#country-{{$country['countryName']}}">
+                                                    {{$country['countryName']}}
+                                                    <i class="ph-caret-down collapsible-indicator ms-auto"></i>
+                                                </a>
+                                            </h6>
+                                        </div>
+
+                                        <div id="country-{{$country['countryName']}}" class="collapse show countries">
+                                            <div class="card-body chart-container">
+                                                <div class="chart has-fixed-height" id="{{$country['countryName']}}Chart"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                @endforeach
+                            </div>
+
                         </div>
                     </div>
                 </div>
 
                 <div class="col-lg-4">
                     <div class="card">
-                        <div class="card-body text-center">
-                            pie chart1
+                        <div class="card-header">
+                            <h5 class="mb-0">Recommendation breakdown</h5>
+                        </div>
+                        <div class="card-body text-center chart-container">
+                            <div class="d-inline-block" id="recommendationBreakdown"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-lg-4">
                     <div class="card">
-                        <div class="card-body text-center">
-                            pie chart 2
+                        <div class="card-header">
+                            <h5 class="mb-0">Risk level breakdown</h5>
+                        </div>
+                        <div class="card-body text-center chart-container">
+                            <div class="d-inline-block" id="riskLevelBreakdown"></div>
                         </div>
                     </div>
                 </div>
@@ -232,6 +266,9 @@
             var numbersScore = JSON.parse(`<?php Print($numbers); ?>`);
 
             mapInit(projectScore.projectScore);
+            pieChartInit(projectScore.projectScore);
+            stackedBarInit(projectScore.projectScore);
+
             $("#countriesData").height($("#countriesMap").height());
         </script>
     @endif

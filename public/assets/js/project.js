@@ -363,14 +363,6 @@ function mapInit(projectScore){
         mapData.push(tmpObj);
     })
 
-    // projectScore.countryAndPhoneType.forEach((element) => {
-    //     var tmpObj = {
-    //         'code' : element.countryCode,
-    //         'name' : element.countryName,
-    //         'values' : element.numberOfNumbers
-    //     }
-    // })
-
     if (typeof echarts == 'undefined') {
         console.warn('Warning - echarts.min.js is not loaded.');
         return;
@@ -752,6 +744,15 @@ function mapInit(projectScore){
                 }
             ]
         });
+
+        map_world_scatter.on('click', function(params) {
+            if(params.data){
+                $(".countries").removeClass('show');
+                $(".countriesLink").addClass('collapsed');
+                $("#country-"+params.data.name).addClass('show');
+                $('a[href="#country-'+params.data.name+'"]').removeClass('collapsed');
+            }
+        });
     }
 
     var triggerChartResize = function() {
@@ -774,6 +775,231 @@ function mapInit(projectScore){
         }, 200);
     });
 }
+
+function pieChartInit(projectScore){
+    if (typeof c3 == 'undefined') {
+        console.warn('Warning - c3.min.js is not loaded.');
+        return;
+    }
+    const recommendationBreakdown = document.getElementById('recommendationBreakdown');
+    if(recommendationBreakdown) {
+
+        // Generate chart
+        const pie_chart = c3.generate({
+            bindto: recommendationBreakdown,
+            size: { width: 250 },
+            color: {
+                pattern: ['#56a34c','#ee9328','#e15a57',]
+            },
+            data: {
+                columns: [
+                    ['Allow', projectScore.recommendationBreakdown.allow + (Math.random() * 10)],
+                    ['Flag', projectScore.recommendationBreakdown.flag + (Math.random() * 10)],
+                    ['Block', projectScore.recommendationBreakdown.block + (Math.random() * 10)],
+                ],
+                type : 'pie'
+            }
+        });
+    }
+
+    const riskLevelBreakdown = document.getElementById('riskLevelBreakdown');
+    if(riskLevelBreakdown) {
+
+        // Generate chart
+        const pie_chart = c3.generate({
+            bindto: riskLevelBreakdown,
+            size: { width: 250 },
+            color: {
+                pattern: ['#56a34c','#88d680','#f6cb75','#ee9328',
+                    '#d87a80','#e15a57',]
+            },
+            data: {
+                columns: [
+                    ['Very low', projectScore.riskLevelBreakdown.veryLow + (Math.random() * 10)],
+                    ['Low', projectScore.riskLevelBreakdown.low],
+                    ['Medium low', projectScore.riskLevelBreakdown.mediumLow + (Math.random() * 10)],
+                    ['Medium', projectScore.riskLevelBreakdown.medium + (Math.random() * 10)],
+                    ['High', projectScore.riskLevelBreakdown.high + (Math.random() * 10)],
+                    ['Very high', projectScore.riskLevelBreakdown.veryHigh + (Math.random() * 10)],
+                ],
+                type : 'pie'
+            }
+        });
+    }
+}
+
+function stackedBarInit(projectScore){
+    if (typeof echarts == 'undefined') {
+        console.error('Warning - echarts.min.js is not loaded.');
+        return;
+    }
+    $.each(projectScore.countryAndPhoneType, function(index, value) {
+        var element = document.getElementById(value.countryName+'Chart');
+        var bars_stacked = echarts.init(element, null, { renderer: 'svg' });
+        var verticalData = [];
+        var allowData = [];
+        var flagData = [];
+        var blockData = [];
+
+        $.each(value.scores, function(index, value) {
+            verticalData.push(value.type);
+            allowData.push(value.allow === 0 ? "-" : value.allow);
+            flagData.push(value.flag === 0 ? "-" : value.flag);
+            blockData.push(value.block === 0 ? "-" : value.block);
+        });
+        bars_stacked.setOption({
+            // Global text styles
+            textStyle: {
+                fontFamily: 'var(--body-font-family)',
+                color: 'var(--body-color)',
+                fontSize: 12,
+                lineHeight: 22,
+                textBorderColor: 'transparent'
+            },
+            // Chart animation duration
+            animationDuration: 550,
+            // Setup grid
+            grid: {
+                left: 0,
+                right: 30,
+                top: 35,
+                bottom: 0,
+                containLabel: true
+            },
+            // Add legend
+            legend: {
+                data: ['Allow', 'Flag', 'Block'],
+                itemHeight: 8,
+                itemGap: 30,
+                textStyle: {
+                    color: 'var(--body-color)',
+                    padding: [0, 5]
+                }
+            },
+            // Add tooltip
+            tooltip: {
+                trigger: 'axis',
+                className: 'shadow-sm rounded',
+                backgroundColor: 'var(--white)',
+                borderColor: 'var(--gray-400)',
+                padding: 15,
+                textStyle: {
+                    color: '#000'
+                },
+                axisPointer: {
+                    type: 'shadow',
+                    shadowStyle: {
+                        color: 'rgba(var(--body-color-rgb), 0.025)'
+                    }
+                }
+            },
+            // Horizontal axis
+            xAxis: [{
+                type: 'value',
+                axisLabel: {
+                    color: 'rgba(var(--body-color-rgb), .65)'
+                },
+                axisLine: {
+                    show: true,
+                    lineStyle: {
+                        color: 'var(--gray-500)'
+                    }
+                },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: 'var(--gray-300)',
+                        type: 'dashed'
+                    }
+                }
+            }],
+            // Vertical axis
+            yAxis: [{
+                type: 'category',
+                data: verticalData,
+                axisLabel: {
+                    color: 'rgba(var(--body-color-rgb), .65)'
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: 'var(--gray-500)'
+                    }
+                },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: 'var(--gray-300)'
+                    }
+                },
+                splitArea: {
+                    show: true,
+                    areaStyle: {
+                        color: ['rgba(var(--white-rgb), .01)', 'rgba(var(--black-rgb), .01)']
+                    }
+                }
+            }],
+            // Add series
+            series: [
+                {
+                    name: 'Allow',
+                    type: 'bar',
+                    stack: 'Total',
+                    barWidth: 36,
+                    itemStyle: {
+                        normal: {
+                            color: '#6ec952',
+                            label: {
+                                show: true,
+                                position: 'insideRight',
+                                padding: [0, 10],
+                                fontSize: 12,
+                                fontWeight: 500
+                            }
+                        }
+                    },
+                    data:allowData
+                },
+                {
+                    name: 'Flag',
+                    type: 'bar',
+                    stack: 'Total',
+                    itemStyle: {
+                        normal: {
+                            color: '#e7e146',
+                            label: {
+                                show: true,
+                                position: 'insideRight',
+                                padding: [0, 10],
+                                fontSize: 12,
+                                fontWeight: 500
+                            }
+                        }
+                    },
+                    data:flagData
+                },
+                {
+                    name: 'Block',
+                    type: 'bar',
+                    stack: 'Total',
+                    itemStyle: {
+                        normal: {
+                            color: '#da3533',
+                            label: {
+                                show: true,
+                                position: 'insideRight',
+                                padding: [0, 10],
+                                fontSize: 12,
+                                fontWeight: 500
+                            }
+                        }
+                    },
+                    data:blockData
+                }
+            ]
+        });
+    })
+}
+
 
 function showAllNumberScores(){
     alert('test');
