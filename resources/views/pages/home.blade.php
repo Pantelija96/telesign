@@ -695,7 +695,7 @@
                                                         <td>22007</td>
                                                         <td>Seen in the last 7 days</td>
                                                         <td class="text-center"><i class="ph-x-circle text-danger ph-2x"></i></td>
-                                                        <td class="text-center"></td>
+                                                        <td class="text-center"><i class="ph-check-circle text-success ph-2x"></i></td>
                                                         <td class="text-center">
                                                             <a href="#"><i class="ph-book-open ph-2x text-primary"></i></a>
                                                         </td>
@@ -712,7 +712,7 @@
 
                 <a href="{{url('/roi')}}" class="btn btn-primary mt-3 mt-sm-0 w-100 w-sm-auto"><i class="ph-database mx-2"></i> SHOW ROI</a>
 
-                
+
             </div>
         </div>
     </div>

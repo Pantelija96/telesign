@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Codes;
 use App\Models\Number;
 use App\Models\Project;
 use GuzzleHttp\Client;
@@ -138,6 +139,7 @@ class BackendController extends Controller
             $dataArray[] = $obj;
         }
         array_shift($dataArray);
+
 
         $response = Number::insert($dataArray);
 
@@ -342,6 +344,70 @@ class BackendController extends Controller
 
         $updateProjectScore = Project::where('_id', '=', $id)->update($projectScore);
         return dd($updateProjectScore);
+    }
+
+    public function getScoreForNumber(Request $request){
+        $validator = Validator::make($request->all(), [
+            'numberId' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with([
+                'errorCode' => 1,
+                'errorMsg' => 'Some error occurred!'
+            ]);
+        }
+
+        $numberId = $request->get('numberId');
+
+        $response = Number::where('_id','=',$numberId)
+            ->first();
+
+        if($response){
+            return response()->json(array([$response]), 200);
+        }
+        else{
+            return response()->json(array(['msg'=> "Some error occurred!", 'error' => $response]), 500);
+        }
+    }
+
+    public function getCodes(Request $request){
+        $validator = Validator::make($request->all(), [
+            'codes' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with([
+                'errorCode' => 1,
+                'errorMsg' => 'Some error occurred!'
+            ]);
+        }
+
+        $codes = $request->get('codes');
+
+        $data = [];
+
+        foreach($codes as $code){
+            $response = Codes::where('code','=', $code)->first();
+            if($response){
+                $obj = [
+                    $response->trafficType,
+                    $response->code,
+                    "<p class='oneNumberCapitalize'>".$response->name."</p>",
+                    $response->risk == true ? "<i class='ph-x-circle text-danger ph-2x'></i>" : "",
+                    $response->trust == true ? "<i class='ph-check-circle text-success ph-2x'></i>" : "" ,
+                    "<a href='#' onclick='showReadMore(`".$response->readMore."`)'><i class='ph-book-open ph-2x text-primary'></i></a>",
+                ];
+
+                $data[] = $obj;
+            }
+            else{
+                return response()->json(array(['msg'=> "Some error occurred!", 'error' => $response]), 500);
+            }
+        }
+
+        return response()->json(array([$data]), 200);
+
     }
 
 

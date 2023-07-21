@@ -1,0 +1,16 @@
+code,Name,Meaning,Risk,Trust
+21001,moderate activity on risky services,Significant activity on this number to or from risky services over the past 90 days.,TRUE,FALSE
+21002,high activity on risky services,Very significant activity on this number to or from risky services over the past 90 days.,TRUE,FALSE
+21004,long-term activity on risky services,Verification traffic on risky services on this number over the past 90 days.,TRUE,FALSE
+21005,short-term activity on risky services,Verification traffic on risky services on this number over the past 24 hours.,TRUE,FALSE
+21006,high long-term activity on risky services,High volume of verification traffic on risky services on this number over the past 90 days.,TRUE,FALSE
+21007,high short-term activity on risky services,High volume of verification traffic on risky services on this number over the past 24 hours.,TRUE,FALSE
+21008,long-term range activity on risky services,Verification traffic on risky services on the range this number belongs to over the past 90 days.,TRUE,FALSE
+21009,short-term range activity on risky services,Verification traffic on risky services on the range this number belongs to over the past 24 hours.,TRUE,FALSE
+21010,high long-term range activity on risky services,High volume of verification traffic on risky services on the range this number belongs to over the past 90 days.,TRUE,FALSE
+21011,high short-term range activity on risky services,High volume of verification traffic on risky services on the range this number belongs to over the past 24 hours.,TRUE,FALSE
+21012,very high short-term activity on risky services,Very high volume of verification traffic on risky services on this number over the past 90 days.,TRUE,FALSE
+21013,very high long-term activity on risky services,Very high volume of verification traffic on risky services on this number over the past 24 hours.,TRUE,FALSE
+21014,very high short-term range activity on risky services,Very high volume of verification traffic on risky services on the range this number belongs to over the past 90 days.,TRUE,FALSE
+21015,very high long-term range activity on risky services,Very high volume of verification traffic on risky services on the range this number belongs to over the past 24 hours.,TRUE,FALSE
+21016,machine-like range activity,Extremely high volume of verification traffic in a very short period (less than 1 hour) on the range this number belongs to.,TRUE,FALSE

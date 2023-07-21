@@ -147,7 +147,7 @@ function addEdit(){
                                     <i class="ph-x me-2"></i>
                                     Remove
                                 </a>
-                                <a href="#" class="dropdown-item text-success" onclick="showThisNumber('`+data[0]['_id']+`')">
+                                <a href="#" class="dropdown-item text-success" onclick="showOneNumberScores('`+data[0]['_id']+`')">
                                     <i class="ph-chart-bar me-2"></i>
                                     Show stats for this number
                                 </a>
@@ -232,7 +232,7 @@ function addEdit(){
                                     <i class="ph-x me-2"></i>
                                     Remove
                                 </a>
-                                <a href="#" class="dropdown-item text-success" onclick="showThisNumber('`+data[0]['numberId']+`')">
+                                <a href="#" class="dropdown-item text-success" onclick="showOneNumberScores('`+data[0]['numberId']+`')">
                                     <i class="ph-chart-bar me-2"></i>
                                     Show stats for this number
                                 </a>
@@ -348,6 +348,8 @@ function sweetAlert(message, title, type){
         showCloseButton: true
     });
 }
+
+
 
 function mapInit(projectScore){
     var mapData = [];
@@ -1001,6 +1003,88 @@ function stackedBarInit(projectScore){
 }
 
 
+function showHideScoreNav(nav){
+    $(".scoreNavigation").removeClass('active');
+    $("#"+nav+"Score").addClass('active');
+
+    $(".scoreNavigationDisplay").addClass('d-none');
+    $("#"+nav+"NumberScore").removeClass('d-none');
+}
+
+function showOneNumberScores(numberId){
+
+    $.ajax({
+        type:'GET',
+        url:'/getScoreForNumber',
+        data:{
+            numberId: numberId,
+        },
+        success:function(data) {
+            $("#oneNumberNumber").text(data[0][0].number);
+            $("#oneNumberRiskLevel").text(data[0][0].scores.riskLevel);
+            $("#oneNumberRecommendation").text(data[0][0].scores.recommendation);
+            $("#oneNumberNumberScore").text(data[0][0].scores.score);
+            $("#oneNumberType").text(data[0][0].scores.type);
+            $("#oneNumberCountry").text(data[0][0].scores.country);
+            $("#oneNumberCarrier").text(data[0][0].scores.carrierName);
+            $("#riskLevelTitle").addClass('bg-'+data[0][0].scores.riskLevel);
+            $("#recommendationTitle").addClass('bg-'+data[0][0].scores.riskLevel);
+            document.getElementById("oneScore").setAttribute("onclick","showHideScoreNav('one')");
+
+            var codes = [
+                ...data[0][0].scores.riskInsights.a2p,
+                ...data[0][0].scores.riskInsights.category,
+                ...data[0][0].scores.riskInsights.email,
+                ...data[0][0].scores.riskInsights.ip,
+                ...data[0][0].scores.riskInsights.number_type,
+                ...data[0][0].scores.riskInsights.p2p,
+            ];
+
+            var dataSet = [];
+
+            $.ajax({
+                type:'GET',
+                url:'/getCodes',
+                data:{
+                    codes: codes,
+                },
+                success:function(data){
+                    var mappingTable = $('.codeMappingDataT');
+                    if($.fn.DataTable.isDataTable( '.codeMappingDataT' )){
+                        mappingTable.DataTable().destroy();
+                    }
+
+                    for (let i = 0; i < data[0][0].length; i++) {
+                        dataSet.push(data[0][0][i]);
+                    }
+
+                    // Initialize
+                    mappingTable.dataTable({
+                        data: dataSet,
+                        columnDefs: []
+                    });
+                },
+                error: function (error){
+                    sweetAlert('Some unexpected error happened!', "Error", 'error');
+                    console.log(error);
+                }
+            });
+
+
+        },
+        error: function (error){
+            sweetAlert('Some unexpected error happened!', "Error", 'error');
+            console.log(error);
+        }
+    });
+
+    showHideScoreNav('one')
+}
+
+function showReadMore(text){
+    sweetAlert(text, 'Read more', 'info');
+}
+
 function showAllNumberScores(){
-    alert('test');
+    showHideScoreNav('all')
 }

@@ -1,0 +1,2 @@
+code,Name,Meaning,Risk,Trust
+21003,machine-like activity,"Behavior pattern that suggests this number is being used by a bot. Although we expect a submitted number engaged in A2P traffic to communicate with automated systems, we don’t expect the user of that number to be an automated system.",TRUE,FALSE

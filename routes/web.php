@@ -13,6 +13,8 @@ Route::get('/deleteNumber', [BackendController::class, 'deleteNumber']);
 Route::post('/uploadCsv', [BackendController::class, 'uploadCsv'])->name('uploadCsv');
 Route::post('/editUser', [BackendController::class, 'editUser'])->name('editUser');
 Route::post('/scoreNumbers', [BackendController::class, 'scoreNumbersTimeTesting'])->name('scoreNumbers');
+Route::get('/getScoreForNumber', [BackendController::class, 'getScoreForNumber']);
+Route::get('/getCodes', [BackendController::class, 'getCodes']);
 Route::get('/deleteProjects', [BackendController::class, 'deleteProjects']);
 
 

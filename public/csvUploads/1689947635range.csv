@@ -1,0 +1,9 @@
+code,Name,Meaning,Risk,Trust
+20101,no range activity,"Very little activity, or none at all, for a risky range that this number belongs to over the past 90 days. Also returned if the number does not belong to a risky range.",FALSE,TRUE
+20102,low range activity,Some activity for a risky range that this number belongs to over the past 90 days.,TRUE,FALSE
+20103,moderate short-term range activity,Significant activity for a risky range that this number belongs to over the last 24 hours.,TRUE,FALSE
+20104,moderate long-term range activity,Significant activity for a risky range that this number belongs to over the past 90 days.,TRUE,FALSE
+20105,high short-term range activity,Very significant activity for a risky range that this number belongs to over the last 24 hours.,TRUE,FALSE
+20106,high long-term range activity,Very significant activity for a risky range that this number belongs to over the past 90 days.,TRUE,FALSE
+20107,very high long-term range activity,Extremely significant activity for a risky range that this number belongs to over the past 90 days.,TRUE,FALSE
+20108,very high short-term range activity,Extremely significant activity for a risky range that this number belongs to over the last 24 hours.,TRUE,FALSE

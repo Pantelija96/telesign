@@ -1,0 +1,14 @@
+code,Name,Meaning,Risk,Trust
+20001,no long-term activity,"Much less than expected activity, or none at all, for this number over the past 90 days.",FALSE,FALSE
+20002,high long-term activity,More than expected activity for this number over the past 90 days.,TRUE,FALSE
+20003,high short-term activity,More than expected activity for this number over the last 24 hours.,TRUE,FALSE
+20004,moderate long-term activity,Expected activity for this number over the past 90 days.,FALSE,TRUE
+20005,moderate short-term activity,Expected activity for this number over the last 24 hours.,FALSE,TRUE
+20006,sparse long-term activity,"Sparse, regular volume of verification traffic on this number over the past 90 days.",FALSE,TRUE
+20007,continuous long-term activity,"Continuous, regular volume of verification traffic on this number over the past 90 days.",FALSE,TRUE
+20008,very high long-term activity,Very high volume of verification traffic on this number over the past 90 days.,TRUE,FALSE
+20009,very high short-term activity,Very high volume of verification traffic on this number over the past 24 hours.,TRUE,FALSE
+20010,no activity,"Very low volume of verification traffic, or none at all, was ever observed on this number.",FALSE,FALSE
+20011,low long-term activity,Low volume of verification traffic on this phone number over the past 90 days.,FALSE,FALSE
+20012,low short-term activity,"Low volume of verification traffic on this phone number over the past 24 hours. Very low volume of verification traffic, or none at all over the past 90 days.",FALSE,FALSE
+20013,low activity,Less than expected activity for this number.,FALSE,FALSE

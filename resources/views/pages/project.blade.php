@@ -145,7 +145,7 @@
                                                         <i class="ph-x me-2"></i>
                                                         Remove
                                                     </a>
-                                                    <a href="#" class="dropdown-item text-success" onclick="showThisNumber('{{$row['_id']}}')">
+                                                    <a href="#" class="dropdown-item text-success" onclick="showOneNumberScores('{{$row['_id']}}')">
                                                         <i class="ph-chart-bar me-2"></i>
                                                         Show stats for this number
                                                     </a>
@@ -176,18 +176,17 @@
         </div>
     </div>
 
-
     @if($scored)
         <div class="py-2 mb-3">
             <h3 class="mb-0">Scoring result</h3>
         </div>
 
         <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-lg-2">
-            <li class="nav-item"><a href="#" class="nav-link active" onclick="showAllNumberScores()">All numbers</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" onclick="showOneNumberScores(0)">One number</a></li>
+            <li class="nav-item"><a href="#" class="nav-link active scoreNavigation" id="allScore" onclick="showAllNumberScores()">All numbers</a></li>
+            <li class="nav-item"><a href="#" class="nav-link scoreNavigation" id="oneScore">One number</a></li>
         </ul>
 
-        <div id="allNumbersScore">
+        <div id="allNumberScore" class="scoreNavigationDisplay">
             <div class="row">
                 <div id="countriesMap">
                     <div class="card">
@@ -258,6 +257,115 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div id="oneNumberScore" class="d-none scoreNavigationDisplay">
+            <h1>Showing calculations for: <span id="oneNumberNumber"></span></h1>
+            <div class="row">
+
+                <div class="col-lg-4 mb-5">
+                    <div class="card">
+                        <div class="card-header text-white border-bottom-0" id="riskLevelTitle">
+                            <h6 class="mb-0 text-black">Risk level:</h6>
+                        </div>
+
+                        <div class="card-body text-center">
+                            <h3 class="mb-0 oneNumberCapitalize" id="oneNumberRiskLevel"></h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-5">
+                    <div class="card">
+                        <div class="card-header text-white border-bottom-0 " id="recommendationTitle">
+                            <h6 class="mb-0 text-black">Recommendation:</h6>
+                        </div>
+
+                        <div class="card-body text-center">
+                            <h3 class="mb-0 oneNumberCapitalize" id="oneNumberRecommendation"></h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-5">
+                    <div class="card">
+                        <div class="card-header text-white bg-light border-bottom-0 ">
+                            <h6 class="mb-0">Score:</h6>
+                        </div>
+
+                        <div class="card-body text-center">
+                            <h3 class="mb-0" id="oneNumberNumberScore"></h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-5">
+                    <div class="card">
+                        <div class="card-header text-white bg-light border-bottom-0 ">
+                            <h6 class="mb-0">Phone type:</h6>
+                        </div>
+
+                        <div class="card-body text-center">
+                            <h3 class="mb-0 oneNumberCapitalize" id="oneNumberType"></h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-5">
+                    <div class="card">
+                        <div class="card-header text-white bg-light border-bottom-0 ">
+                            <h6 class="mb-0">Country:</h6>
+                        </div>
+
+                        <div class="card-body text-center">
+                            <h3 class="mb-0" id="oneNumberCountry"></h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-5">
+                    <div class="card">
+                        <div class="card-header text-white bg-light border-bottom-0 ">
+                            <h6 class="mb-0">Carrier name:</h6>
+                        </div>
+
+                        <div class="card-body text-center">
+                            <h3 class="mb-0" id="oneNumberCarrier"> </h3>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Code mapping</h5>
+                    </div>
+
+                    <table class="table codeMappingDataT">
+                        <thead>
+                        <tr>
+                            <th>Traffic type</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Risk</th>
+                            <th>Trust</th>
+                            <th>Details</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row d-flex flex-row-reverse">
+            <div class="col-lg-4" style="text-align: right;">
+                <button type="button" class="btn btn-primary">
+                    ROI
+                    <i class="ph-currency-circle-dollar ms-2"></i>
+                </button>
             </div>
         </div>
 
