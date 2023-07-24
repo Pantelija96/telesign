@@ -350,7 +350,6 @@ function sweetAlert(message, title, type){
 }
 
 
-
 function mapInit(projectScore){
     var mapData = [];
 

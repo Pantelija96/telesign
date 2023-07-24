@@ -38,7 +38,7 @@
         </div>
 
         <div class="navbar-brand flex-1 flex-lg-0">
-            <a href="{{url('/home')}}" class="d-inline-flex align-items-center">
+            <a href="{{url('/home2')}}" class="d-inline-flex align-items-center">
                 <img src="{{asset('/')}}assets/img/telesignBlueLogo.png" alt="Telesign blue logo" class="iconSize">
             </a>
         </div>
@@ -58,9 +58,9 @@
                         My profile
                     </a>
                     <a href="#" class="dropdown-item">
-                        <i class="ph-envelope-open me-2"></i>
-                        New projects
-                        <span class="badge bg-warning rounded-pill ms-auto">26</span>
+                        <i class="ph-warning-circle me-2"></i>
+                        Unsaved projects
+                        <span class="badge bg-warning rounded-pill ms-auto">{{session()->all()['numberOfUnsaved']}}</span>
                     </a>
                     <div class="dropdown-divider"></div>
                     <a href="{{url('/logout')}}" class="dropdown-item">
@@ -109,7 +109,7 @@
 
                     <!-- Main -->
                     <li class="nav-item">
-                        <a href="{{url('/home')}}" class="nav-link @yield('homePage')">
+                        <a href="{{url('/home2')}}" class="nav-link @yield('homePage')">
                             <i class="ph-house"></i><span>Home</span>
                         </a>
                     </li>

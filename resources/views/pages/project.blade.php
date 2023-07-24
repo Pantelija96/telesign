@@ -362,10 +362,10 @@
 
         <div class="row d-flex flex-row-reverse">
             <div class="col-lg-4" style="text-align: right;">
-                <button type="button" class="btn btn-primary">
+                <a href="{{url('/roi').'/'.$id}}" class="btn btn-primary">
                     ROI
                     <i class="ph-currency-circle-dollar ms-2"></i>
-                </button>
+                </a>
             </div>
         </div>
 

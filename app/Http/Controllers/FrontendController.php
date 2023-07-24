@@ -25,27 +25,47 @@ class FrontendController extends Controller
         return view('pages.login', $this->data);
     }
 
-    public function home($view = 0){
-        $newProjects = [];
-        $openedProjects = [];
-        $userProjects = User::where('_id', '=', session()->get('user')['_id'])->first()['projects'];
-        foreach ($userProjects as $userProject){
-            if($userProject["owner"]){
-                $openedProjects[] = $userProject;
-            }
-            else{
-                if($userProject["opened"]){
-                    $openedProjects[] = $userProject;
-                }
-                else{
-                    $newProjects[] = $userProject;
-                }
+    public function home($view = 0, $status = null){
+        $userId = session()->get('user')['_id'];
+
+        $ownedProject = [];
+        $seeOnlyProjects = [];
+
+        $projects = Project::where('owner', '=', $userId)
+            ->orWhere('saved', '=', true)
+            ->get();
+
+        if($view == 0) {
+            switch ($status) {
+                case "owned":
+                    $projects = Project::where('owner', '=', $userId)->get();
+                    break;
+                case "unsaved":
+                    $projects = Project::where('owner', '=', $userId)->where('saved', '=', false)->get();
+                    break;
+                case "readonly":
+                    $projects = Project::where('owner', '!=', $userId)->where('saved', '=', true)->get();
+                    break;
+                default:
+                    $projects = Project::where('owner', '=', $userId)->orWhere('saved', '=', true)->get();
             }
         }
-        $this->data['openedProjects'] = $openedProjects;
-        $this->data['newProjects'] = $newProjects;
-        $this->data['allProjects'] = $userProjects;
+
+
+        foreach ($projects as $project){
+            if($project->owner === $userId){
+                $ownedProject[] = $project;
+            }
+            else{
+                $seeOnlyProjects[] = $project;
+            }
+        }
+
+        $this->data['ownedProjects'] = $ownedProject;
+        $this->data['seeOnlyProjects'] = $seeOnlyProjects;
+        $this->data['allProjects'] = $projects;
         $this->data['view'] = $view;
+        $this->data['status'] = $status;
 
 //        return dd($this->data);
         return view('pages.homeProjects', $this->data);
@@ -66,10 +86,9 @@ class FrontendController extends Controller
             $obj = [
                 "projectId" => $projectId,
                 "owner" => true,
-                "opened" => true,
                 "saved" => false,
-                'projectName' => "Generic name",
-                'projectDescription' => "Generic description",
+                'projectName' => "Generic project name",
+                'customerName' => "Generic customer name",
                 'date' => Carbon::now()->timestamp
             ];
             $user = User::where([
@@ -82,35 +101,24 @@ class FrontendController extends Controller
             $this->data['project'] = $project->where('_id', $id)->first();
             $this->data['numbers'] = Number::where('projectId', $id)->get();
             $this->data['scored'] = empty(!$this->data['project']['projectScore']);
+            $this->data['id'] = $id;
             return view('pages.project', $this->data);
         }
+    }
 
-//            $project->numbers = [
-//                [
-//                    'number' => 11123,
-//                    'ip' => '1.1.1.1',
-//                    'email' => 'email1@test.com',
-//                    '_id' => new ObjectID()
-//                ],
-//                [
-//                    'number' => 22223,
-//                    'ip' => '2.2.2.2',
-//                    'email' => '',
-//                    '_id' => new ObjectID()
-//                ],
-//                [
-//                    'number' => 33323,
-//                    'ip' => '3.3.3.3',
-//                    'email' => 'email3@test.com',
-//                    '_id' => new ObjectID()
-//                ],
-//            ];
+    public function roi($id){
+        $this->data['id'] = $id;
+        return view('pages.roi2', $this->data);
     }
 
     public function profile($id){
         $user = new User();
         $this->data['userData'] = $user->where('_id', $id)->first();
         return view('pages.profileSettings', $this->data);
+    }
+
+    public function openProject($id){
+        return dd($id);
     }
 
 

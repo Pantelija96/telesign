@@ -43,9 +43,15 @@ class BackendController extends Controller
             'password' => $request->get('password')
         ])->first();
 
+
+
         if($user){
+            $numberOfUnsaved = Project::where('owner', '=', $user['_id'])
+                ->where('saved', '=', false)
+                ->count();
             $request->session()->put('user', $user);
-            return redirect('/home');
+            $request->session()->put('numberOfUnsaved', $numberOfUnsaved);
+            return redirect('/home2');
         }
 
         return redirect('/')->with([
@@ -408,6 +414,10 @@ class BackendController extends Controller
 
         return response()->json(array([$data]), 200);
 
+    }
+
+    public function saveProject(Request $request){
+        return dd($request->all());
     }
 
 

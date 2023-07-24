@@ -151,3 +151,7 @@
 .oneNumberCapitalize{
     text-transform: capitalize;
 }
+
+.closer-to-sign{
+    padding-left: 30px !important;
+}
