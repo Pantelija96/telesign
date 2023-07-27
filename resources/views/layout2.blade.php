@@ -57,7 +57,7 @@
                         <i class="ph-user-circle me-2"></i>
                         My profile
                     </a>
-                    <a href="#" class="dropdown-item">
+                    <a href="{{url('/home2').'/0/unsaved'}}" class="dropdown-item">
                         <i class="ph-warning-circle me-2"></i>
                         Unsaved projects
                         <span class="badge bg-warning rounded-pill ms-auto">{{session()->all()['numberOfUnsaved']}}</span>

@@ -102,7 +102,7 @@
                             </li>
 
                             <li class="nav-item ms-1">
-                                <a href="{{url('/home2/1')}}" class="navbar-nav-link navbar-nav-link-icon rounded">
+                                <a href="{{url('/home2/1').'/'.$status}}" class="navbar-nav-link navbar-nav-link-icon rounded">
                                     <i class="ph-list"></i>
                                 </a>
                             </li>
@@ -140,7 +140,7 @@
                                     </div>
 
                                     <div>
-                                        <h6 class="mb-1"><a href="{{url('/open').'/'.$project['_id']}}}">{{$project['name']}}</a></h6>
+                                        <h6 class="mb-1"><a href="{{url('/open').'/'.$project['_id'].'/'.$project['owner']}}">{{$project['name']}}</a></h6>
                                         <p class="mb-2">{{$project['description']}}</p>
                                     </div>
 
@@ -189,7 +189,7 @@
                                     </div>
 
                                     <div>
-                                        <h6 class="mb-1"><a href="{{url('/open').'/'.$project['_id']}}}">{{$project['name']}}</a></h6>
+                                        <h6 class="mb-1"><a href="{{url('/open').'/'.$project['_id'].'/'.$project['owner']}}">{{$project['name']}}</a></h6>
                                         <p class="mb-2">{{$project['description']}}</p>
                                     </div>
 
@@ -228,7 +228,7 @@
 
                             <ul class="navbar-nav flex-row">
                                 <li class="nav-item">
-                                    <a href="{{url('/home2/0')}}" class="navbar-nav-link navbar-nav-link-icon rounded">
+                                    <a href="{{url('/home2/0').'/'.$status}}" class="navbar-nav-link navbar-nav-link-icon rounded">
                                         <i class="ph-squares-four"></i>
                                     </a>
                                 </li>
@@ -259,7 +259,7 @@
                         @foreach($allProjects as $project)
                             <tr>
                                 <td>{{$loop->iteration}}</td>
-                                <td><a href="{{url('/open').'/'.$project['_id']}}}">{{$project['name']}}</a></td>
+                                <td><a href="{{url('/open').'/'.$project['_id'].'/'.$project['owner']}}">{{$project['name']}}</a></td>
                                 <td>{{$project['description']}}</td>
                                 <td>
                                     @if($project['owner'] === session()->get('user')['_id'])

@@ -23,11 +23,10 @@ Route::get('/deleteProjects', [BackendController::class, 'deleteProjects']);
 
 
 Route::get('/home2/{view?}/{status?}', [FrontendController::class, 'home']);
-//Route::get('/home2/{view?}', [FrontendController::class, 'home']);
 Route::get('/project/{id?}', [FrontendController::class, 'project']);
 Route::get('/roi/{id?}', [FrontendController::class, 'roi']);
 Route::get('/profile/{id}', [FrontendController::class, 'profile']);
-Route::get('/open/{id}', [FrontendController::class, 'openProject']);
+Route::get('/open/{id}/{owner}', [FrontendController::class, 'openProject']);
 
 
 Route::get('/', [FrontendController::class, 'showLogin']);

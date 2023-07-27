@@ -83,18 +83,8 @@ class FrontendController extends Controller
             $project->description = "Generic desc";
             $project->save();
             $projectId = $project->id;
-            $obj = [
-                "projectId" => $projectId,
-                "owner" => true,
-                "saved" => false,
-                'projectName' => "Generic project name",
-                'customerName' => "Generic customer name",
-                'date' => Carbon::now()->timestamp
-            ];
-            $user = User::where([
-                '_id' => session()->get('user')['_id']
-            ])->push('projects', array($obj));
-
+            $unsavedProj = session()->get('numberOfUnsaved') + 1;
+            session()->put('numberOfUnsaved', $unsavedProj);
             return redirect('/project/'.$project->id);
         }
         else{
@@ -117,8 +107,16 @@ class FrontendController extends Controller
         return view('pages.profileSettings', $this->data);
     }
 
-    public function openProject($id){
-        return dd($id);
+    public function openProject($id, $owner){
+        $logedUserId = session()->get('user')['_id'];
+        if ($owner == $logedUserId){
+            return redirect('/project/'.$id);
+        }
+        else{
+            return 'read only';
+            $this->data['project'] = $project->where('_id', $id)->first();
+            return view('pages.readOnly', $this->data);
+        }
     }
 
 
