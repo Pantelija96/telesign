@@ -417,7 +417,41 @@ class BackendController extends Controller
     }
 
     public function saveProject(Request $request){
-        return dd($request->all());
+
+        $projectId = $request->get('projectId');
+        $project = Project::where('_id', '=', $projectId)
+            ->update([
+                'saved' => true,
+                'name' => $request->get('customerName') == "" ? "Generic customer name" : $request->get('customerName'),
+                'description' => $request->get('solutionName') == "" ? "Generic solution name" : $request->get('solutionName'),
+                'jobDate' => $request->get('jobDate'),
+                'periodMultiplier' => $request->get('periodMultiplier'),
+                'periodFrom' => $request->get('periodFrom'),
+                'periodTo' => $request->get('periodTo'),
+                'roi' => $request->get('roi'),
+                'transactionAvoided' => $request->get('transactionAvoided'),
+                'averageValOfTrans' => $request->get('averageValOfTrans'),
+                'fraudAvoidedBy' => $request->get('fraudAvoidedBy'),
+                'monthlyCost' => $request->get('monthlyCost'),
+                'otherCosts' => $request->get('otherCosts'),
+                'totalCost' => $request->get('totalCost'),
+                'costPerPhone' => $request->get('costPerPhone'),
+                'totalPerPhone' => $request->get('totalPerPhone'),
+                'averageSMS' => $request->get('averageSMS'),
+                'totalSMS' => $request->get('totalSMS'),
+                'otherSavings' => $request->get('otherSavings'),
+                'totalSavings' => $request->get('totalSavings')
+            ]);
+
+        if($project){
+            $numberOfUnsaved = session()->get('numberOfUnsaved');
+            session()->put('numberOfUnsaved', $numberOfUnsaved - 1);
+            return redirect('/home2');
+        }
+        else{
+            return redirect()->back();
+        }
+
     }
 
 
@@ -493,6 +527,8 @@ class BackendController extends Controller
                 'scores' => $numberScore
             ]);
 
+//            return dd($apiResult->risk->level);
+
             switch ($apiResult->risk->level){
                 case "very_low":
                     $projectScore['riskLevelBreakdown']['veryLow']++;
@@ -509,7 +545,7 @@ class BackendController extends Controller
                 case "high":
                     $projectScore['riskLevelBreakdown']['high']++;
                     break;
-                case "very_high":
+                case "very-high":
                     $projectScore['riskLevelBreakdown']['veryHigh']++;
                     break;
                 default:

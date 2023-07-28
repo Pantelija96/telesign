@@ -689,11 +689,11 @@ function mapInit(projectScore){
 
             // Map config
             geo: {
-                center: [16, 48],
+                center: [0, 30],
                 type: 'map',
                 map: 'world',
                 roam: true,
-                zoom: 8,
+                zoom: 3,
                 aspectScale: 0.85,
                 scaleLimit: {
                     min: 2,
@@ -794,9 +794,9 @@ function pieChartInit(projectScore){
             },
             data: {
                 columns: [
-                    ['Allow', projectScore.recommendationBreakdown.allow + (Math.random() * 10)],
-                    ['Flag', projectScore.recommendationBreakdown.flag + (Math.random() * 10)],
-                    ['Block', projectScore.recommendationBreakdown.block + (Math.random() * 10)],
+                    ['Allow', projectScore.recommendationBreakdown.allow],
+                    ['Flag', projectScore.recommendationBreakdown.flag],
+                    ['Block', projectScore.recommendationBreakdown.block],
                 ],
                 type : 'pie'
             }
@@ -816,12 +816,12 @@ function pieChartInit(projectScore){
             },
             data: {
                 columns: [
-                    ['Very low', projectScore.riskLevelBreakdown.veryLow + (Math.random() * 10)],
+                    ['Very low', projectScore.riskLevelBreakdown.veryLow],
                     ['Low', projectScore.riskLevelBreakdown.low],
-                    ['Medium low', projectScore.riskLevelBreakdown.mediumLow + (Math.random() * 10)],
-                    ['Medium', projectScore.riskLevelBreakdown.medium + (Math.random() * 10)],
-                    ['High', projectScore.riskLevelBreakdown.high + (Math.random() * 10)],
-                    ['Very high', projectScore.riskLevelBreakdown.veryHigh + (Math.random() * 10)],
+                    ['Medium low', projectScore.riskLevelBreakdown.mediumLow],
+                    ['Medium', projectScore.riskLevelBreakdown.medium],
+                    ['High', projectScore.riskLevelBreakdown.high],
+                    ['Very high', projectScore.riskLevelBreakdown.veryHigh],
                 ],
                 type : 'pie'
             }

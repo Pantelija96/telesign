@@ -140,8 +140,8 @@
                                     </div>
 
                                     <div>
-                                        <h6 class="mb-1"><a href="{{url('/open').'/'.$project['_id'].'/'.$project['owner']}}">{{$project['name']}}</a></h6>
-                                        <p class="mb-2">{{$project['description']}}</p>
+                                        <h6 class="mb-1"><a href="{{url('/project').'/'.$project['_id']}}">{{$project['description']}}</a></h6>
+                                        <p class="mb-2">{{$project['name']}}</p>
                                     </div>
 
                                     <div class="d-sm-flex align-items-sm-center flex-sm-wrap">
@@ -189,8 +189,8 @@
                                     </div>
 
                                     <div>
-                                        <h6 class="mb-1"><a href="{{url('/open').'/'.$project['_id'].'/'.$project['owner']}}">{{$project['name']}}</a></h6>
-                                        <p class="mb-2">{{$project['description']}}</p>
+                                        <h6 class="mb-1"><a href="{{url('/project').'/'.$project['_id']}}">{{$project['description']}}</a></h6>
+                                        <p class="mb-2">{{$project['name']}}</p>
                                     </div>
 
                                     <div class="d-sm-flex align-items-sm-center flex-sm-wrap">
@@ -207,95 +207,95 @@
 
             <!-- /task grid -->
 
-            @elseif($view == 1)
-                <div class="navbar navbar-expand-lg shadow rounded py-1 mb-3">
-                    <div class="container-fluid">
-                        <div class="text-center d-lg-none">
+        @elseif($view == 1)
+            <div class="navbar navbar-expand-lg shadow rounded py-1 mb-3">
+                <div class="container-fluid">
+                    <div class="text-center d-lg-none">
+                        <h5 class="mb-0">List view</h5>
+                    </div>
+
+                    <div class="navbar-collapse collapse order-2 order-lg-1" id="navbar-filter">
+                        <span class="navbar-text d-none d-lg-inline-flex align-items-lg=center me-3">
                             <h5 class="mb-0">List view</h5>
-                        </div>
+                        </span>
+                    </div>
 
-                        <div class="navbar-collapse collapse order-2 order-lg-1" id="navbar-filter">
-                            <span class="navbar-text d-none d-lg-inline-flex align-items-lg=center me-3">
-                                <h5 class="mb-0">List view</h5>
-                            </span>
-                        </div>
+                    <div class="d-flex order-1 order-lg-2 ms-auto">
+                        <span class="navbar-text d-none d-lg-inline-flex align-items-lg-center me-3 ms-lg-auto">
+                            <i class="ph-eye me-2"></i>
+                            View mode:
+                        </span>
 
-                        <div class="d-flex order-1 order-lg-2 ms-auto">
-                            <span class="navbar-text d-none d-lg-inline-flex align-items-lg-center me-3 ms-lg-auto">
-                                <i class="ph-eye me-2"></i>
-                                View mode:
-                            </span>
+                        <ul class="navbar-nav flex-row">
+                            <li class="nav-item">
+                                <a href="{{url('/home2/0').'/'.$status}}" class="navbar-nav-link navbar-nav-link-icon rounded">
+                                    <i class="ph-squares-four"></i>
+                                </a>
+                            </li>
 
-                            <ul class="navbar-nav flex-row">
-                                <li class="nav-item">
-                                    <a href="{{url('/home2/0').'/'.$status}}" class="navbar-nav-link navbar-nav-link-icon rounded">
-                                        <i class="ph-squares-four"></i>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item ms-1">
-                                    <a href="#" class="navbar-nav-link navbar-nav-link-icon active rounded">
-                                        <i class="ph-list"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                            <li class="nav-item ms-1">
+                                <a href="#" class="navbar-nav-link navbar-nav-link-icon active rounded">
+                                    <i class="ph-list"></i>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
+            </div>
 
-                <div class="card">
-                    <table class="table datatable-html">
-                        <thead>
+            <div class="card">
+                <table class="table datatable-html">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Project name</th>
+                        <th>Project description</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($allProjects as $project)
                         <tr>
-                            <th>#</th>
-                            <th>Project name</th>
-                            <th>Project description</th>
-                            <th>Status</th>
-                            <th>Date</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($allProjects as $project)
-                            <tr>
-                                <td>{{$loop->iteration}}</td>
-                                <td><a href="{{url('/open').'/'.$project['_id'].'/'.$project['owner']}}">{{$project['name']}}</a></td>
-                                <td>{{$project['description']}}</td>
-                                <td>
-                                    @if($project['owner'] === session()->get('user')['_id'])
-                                        @if($project['saved'])
-                                            <span class="badge bg-success me-2">Saved</span>
-                                        @else
-                                            <span class="badge bg-warning me-2">Unsaved</span>
-                                        @endif
-                                        <span class="badge bg-primary me-2">Owner</span>
+                            <td>{{$loop->iteration}}</td>
+                            <td><a href="{{url('/project').'/'.$project['_id']}}">{{$project['name']}}</a></td>
+                            <td>{{$project['description']}}</td>
+                            <td>
+                                @if($project['owner'] === session()->get('user')['_id'])
+                                    @if($project['saved'])
+                                        <span class="badge bg-success me-2">Saved</span>
                                     @else
-                                        <span class="badge bg-indigo me-2">Read only</span>
+                                        <span class="badge bg-warning me-2">Unsaved</span>
                                     @endif
-                                </td>
-                                <td><a href="#">{{date('d.m.Y', strtotime($project['created_at']))}}</a></td>
-                                <td class="text-center">
-                                    <div class="d-inline-flex">
-                                        <div class="dropdown">
-                                            <a href="#" class="text-body" data-bs-toggle="dropdown">
-                                                <i class="ph-list"></i>
-                                            </a>
+                                    <span class="badge bg-primary me-2">Owner</span>
+                                @else
+                                    <span class="badge bg-indigo me-2">Read only</span>
+                                @endif
+                            </td>
+                            <td><a href="#">{{date('d.m.Y', strtotime($project['created_at']))}}</a></td>
+                            <td class="text-center">
+                                <div class="d-inline-flex">
+                                    <div class="dropdown">
+                                        <a href="#" class="text-body" data-bs-toggle="dropdown">
+                                            <i class="ph-list"></i>
+                                        </a>
 
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item"><i class="ph-calendar-check me-2"></i> Check</a>
-                                                @if($project['owner'] === session()->get('user')['_id'])
-                                                    <a href="#" class="dropdown-item"><i class="ph-x me-2"></i> Remove / delete this project</a>
-                                                @endif
-                                            </div>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a href="#" class="dropdown-item"><i class="ph-calendar-check me-2"></i> Check</a>
+                                            @if($project['owner'] === session()->get('user')['_id'])
+                                                <a href="#" class="dropdown-item"><i class="ph-x me-2"></i> Remove / delete this project</a>
+                                            @endif
                                         </div>
                                     </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
 
     </div>
 

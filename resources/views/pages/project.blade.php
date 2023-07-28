@@ -44,6 +44,7 @@
                     </a>
                 </h6>
 
+                @if($owner)
                 <div class="collapse d-sm-block ms-sm-auto my-sm-auto" id="card_header">
                     <div class="form-control-feedback form-control-feedback-end mt-3 mt-sm-0">
                         <form action="{{route('uploadCsv')}}" method="POST" class="modal-body row row-cols-lg-auto g-3 align-items-center justify-content-center" enctype='multipart/form-data'>
@@ -62,14 +63,14 @@
                             </div>
                         </form>
                     </div>
-
-
                 </div>
+                @endif
 
             </div>
             <div class="card-body">
 
-                <div class="card">
+                @if($owner)
+                    <div class="card">
                     <div class="card-header border-bottom-0 pb-0 mb-3 d-flex align-items-center">
                         <h6 class="mb-0" id="addEditFormName">Add form</h6>
                         <div class="d-inline-flex ms-auto">
@@ -109,6 +110,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
                 <div class="card p-lg-3">
                     <table class="table datatable-html">
@@ -137,14 +139,16 @@
                                                 </a>
 
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="#" class="dropdown-item text-primary" onclick="editThisNumber('{{$row['_id']}}', '{{$row['number']}}')">
-                                                        <i class="ph-pencil-simple me-2"></i>
-                                                        Edit
-                                                    </a>
-                                                    <a href="#" class="dropdown-item text-danger" onclick="deleteThisNumber('{{$row['_id']}}')">
-                                                        <i class="ph-x me-2"></i>
-                                                        Remove
-                                                    </a>
+                                                    @if($owner)
+                                                        <a href="#" class="dropdown-item text-primary" onclick="editThisNumber('{{$row['_id']}}', '{{$row['number']}}')">
+                                                            <i class="ph-pencil-simple me-2"></i>
+                                                            Edit
+                                                        </a>
+                                                        <a href="#" class="dropdown-item text-danger" onclick="deleteThisNumber('{{$row['_id']}}')">
+                                                            <i class="ph-x me-2"></i>
+                                                            Remove
+                                                        </a>
+                                                    @endif
                                                     <a href="#" class="dropdown-item text-success" onclick="showOneNumberScores('{{$row['_id']}}')">
                                                         <i class="ph-chart-bar me-2"></i>
                                                         Show stats for this number
@@ -163,6 +167,7 @@
 
 
             </div>
+            @if($owner)
             <div class="card-footer d-sm-flex justify-content-end align-items-sm-center py-sm-2">
                 <form method="POST" action="{{route('scoreNumbers')}}" id="scoreForm">
                     {{csrf_field()}}
@@ -173,6 +178,7 @@
                     </button>
                 </form>
             </div>
+            @endif
         </div>
     </div>
 
@@ -211,18 +217,17 @@
 
                             <div class="card-group-vertical" id="allCountries">
                                 @foreach($project['projectScore']['countryAndPhoneType'] as $country)
-
                                     <div class="card border shadow-none">
                                         <div class="card-header">
                                             <h6 class="mb-0">
-                                                <a data-bs-toggle="collapse" class="d-flex align-items-center text-body countriesLink" href="#country-{{$country['countryName']}}">
+                                                <a data-bs-toggle="collapse" class="d-flex align-items-center text-body countriesLink" href="#country-{{$country['countryCode']}}">
                                                     {{$country['countryName']}}
                                                     <i class="ph-caret-down collapsible-indicator ms-auto"></i>
                                                 </a>
                                             </h6>
                                         </div>
 
-                                        <div id="country-{{$country['countryName']}}" class="collapse show countries">
+                                        <div id="country-{{$country['countryCode']}}" class="collapse show countries">
                                             <div class="card-body chart-container">
                                                 <div class="chart has-fixed-height" id="{{$country['countryName']}}Chart"></div>
                                             </div>

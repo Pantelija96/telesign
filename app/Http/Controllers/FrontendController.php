@@ -88,16 +88,40 @@ class FrontendController extends Controller
             return redirect('/project/'.$project->id);
         }
         else{
-            $this->data['project'] = $project->where('_id', $id)->first();
+            $projectData = $project->where('_id', $id)->first();
+            $this->data['project']  = $projectData;
             $this->data['numbers'] = Number::where('projectId', $id)->get();
             $this->data['scored'] = empty(!$this->data['project']['projectScore']);
             $this->data['id'] = $id;
+            $this->data['owner'] = false;
+
+            $loggedUserId = session()->get('user')['_id'];
+            if($loggedUserId == $projectData['owner']){
+                $this->data['owner'] = true;
+            }
+
             return view('pages.project', $this->data);
         }
     }
 
     public function roi($id){
         $this->data['id'] = $id;
+        $project = Project::where('_id', '=', $id)->first();
+        $this->data['project'] = $project;
+        $this->data['owner'] = false;
+        $loggedUserId = session()->get('user')['_id'];
+        if($loggedUserId == $project['owner']){
+            $this->data['owner'] = true;
+        }
+        $veryLow = $project['projectScore']['riskLevelBreakdown']['veryLow'];
+        $low = $project['projectScore']['riskLevelBreakdown']['low'];
+        $mediumLow = $project['projectScore']['riskLevelBreakdown']['mediumLow'];
+        $medium = $project['projectScore']['riskLevelBreakdown']['medium'];
+        $high = $project['projectScore']['riskLevelBreakdown']['high'];
+        $veryHigh = $project['projectScore']['riskLevelBreakdown']['veryHigh'];
+        $this->data['numberOfNumbers'] = $veryLow + $low + $mediumLow + $medium + $high + $veryHigh;
+        $this->data['scamNumbers'] = $high + $veryHigh;
+//                return dd($this->data);
         return view('pages.roi2', $this->data);
     }
 
@@ -113,8 +137,8 @@ class FrontendController extends Controller
             return redirect('/project/'.$id);
         }
         else{
-            return 'read only';
-            $this->data['project'] = $project->where('_id', $id)->first();
+//            return 'read only';
+            $this->data['project'] = Project::where('_id', $id)->first();
             return view('pages.readOnly', $this->data);
         }
     }

@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
+    calculateFraudAvoidedBy();
+    calculateTotalCost();
+    calculateTotalSMS();
+    calculatePerPhone();
+    calculateTotalSavings();
+    calculateROI();
+
     if (typeof Datepicker == 'undefined') {
         console.warn('Warning - datepicker.min.js is not loaded.');
         return;
@@ -217,3 +224,61 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+function calculateFraudAvoidedBy() {
+    var scamNumbers = parseInt($("#scamNumbers").val());
+    var averageValue = parseFloat($("#averageValOfTrans").val());
+
+    var fraudAvoidedBy = scamNumbers * averageValue;
+    $("#fraudAvoidedBy").val(fraudAvoidedBy);
+
+    calculateROI();
+}
+function calculateTotalCost(){
+    var numberOfNumbers = parseInt($("#numberOfNumbers").val());
+    var monthlyCost = parseFloat($("#monthlyCost").val());
+    var otherCosts = parseFloat($("#otherCosts").val());
+
+    var totalCost = monthlyCost + otherCosts * numberOfNumbers;
+    $("#totalCost").val(totalCost);
+
+    calculateROI();
+}
+function calculateTotalSMS(){
+    var scamNumbers = parseInt($("#scamNumbers").val());
+    var averageSMS = parseFloat($("#averageSMS").val());
+
+    var totalSMS = averageSMS * scamNumbers;
+    $("#totalSMS").val(totalSMS);
+    calculateTotalSavings();
+}
+function calculatePerPhone(){
+    var numberOfNumbers = parseInt($("#numberOfNumbers").val());
+    var costPerPhone = parseFloat($("#costPerPhone").val());
+
+    var totalPerPhone = costPerPhone * numberOfNumbers;
+    $("#totalPerPhone").val(totalPerPhone);
+    calculateTotalSavings();
+}
+function calculateTotalSavings(){
+    var savingsPhone = parseFloat($("#totalPerPhone").val());
+    var savingsSms = parseFloat($("#totalSMS").val());
+
+    var totalSavings = savingsPhone + savingsSms;
+    $("#totalSavings").val(totalSavings);
+
+    calculateROI();
+}
+function calculateROI(){
+    //fraudAvoidedBy
+    //totalCost
+    var fraudAvoidedBy = parseFloat($("#fraudAvoidedBy").val());
+    var totalSavings = parseFloat($("#totalSavings").val());
+    var totalCost = parseFloat($("#totalCost").val());
+
+    var roi = fraudAvoidedBy - totalCost + totalSavings;
+    console.log("fraudAvoidedBy", fraudAvoidedBy);
+    console.log("totalCost", totalCost);
+    console.log("totalSavings", totalSavings);
+    console.log("roi", roi);
+    $("#roi").val(roi);
+}

@@ -33,16 +33,20 @@
 
     <div class="row">
 
-            <form action="{{route('saveProject')}}" method="POST">
+            <form action="@if($owner){{route('saveProject')}}@endif" method="POST">
+                @if($owner)
                 {{csrf_field()}}
                 <input type="hidden" name="projectId" id="projectId" value="{{$id}}">
+                <input type="hidden" name="numberOfNumbers" id="numberOfNumbers" value="{{$numberOfNumbers}}">
+                <input type="hidden" name="scamNumbers" id="scamNumbers" value="{{$scamNumbers}}">
+                @endif
                 <fieldset>
                     <legend class="fs-base fw-bold border-bottom pb-2 mb-3">Solution details</legend>
 
                     <div class="row mb-3">
                         <label class="col-lg-3 col-form-label" for="solutionName">Solution:</label>
                         <div class="col-lg-3">
-                            <input type="text" class="form-control" placeholder="Solution name" id="solutionName" name="solutionName">
+                            <input type="text" class="form-control" placeholder="Solution name" id="solutionName" name="solutionName" @if(!empty($project['description'])) value="{{$project['description']}}" @endif @if(!$owner) readonly @endif>
                         </div>
                         <label class="col-lg-3 col-form-label" for="jobDate">Job date:</label>
                         <div class="col-lg-3">
@@ -50,7 +54,7 @@
                                 <span class="input-group-text">
                                     <i class="ph-calendar"></i>
                                 </span>
-                                <input type="text" class="form-control pick-date-basic" name="jobDate" id="jobDate" placeholder="Pick a job date">
+                                <input type="text" class="form-control pick-date-basic" name="jobDate" id="jobDate" placeholder="Pick a job date" @if(!empty($project['jobDate'])) value="{{$project['jobDate']}}" @endif @if(!$owner) disabled @endif>
                             </div>
                         </div>
                     </div>
@@ -58,13 +62,13 @@
                     <div class="row mb-3">
                         <label class="col-lg-3 col-form-label" for="customerName">Customer:</label>
                         <div class="col-lg-3">
-                            <input type="text" class="form-control" placeholder="Customer name" id="customerName" name="customerName">
+                            <input type="text" class="form-control" placeholder="Customer name" id="customerName" name="customerName" @if(!empty($project['name'])) value="{{$project['name']}}" @endif @if(!$owner) readonly @endif>
                         </div>
                         <label class="col-lg-3 col-form-label" for="periodMultiplier">Period multiplier:</label>
                         <div class="col-lg-3">
 
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control" placeholder="0" id="periodMultiplier" name="periodMultiplier">
+                                <input type="number" class="form-control" placeholder="0" id="periodMultiplier" name="periodMultiplier" @if(!empty($project['periodMultiplier'])) value="{{$project['periodMultiplier']}}" @else value="1" @endif @if(!$owner) readonly @endif>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-x-circle"></i>
                                 </div>
@@ -78,15 +82,15 @@
                         <div class="col-lg-3">
 
                             <div class="input-group datepicker-range-one-side">
-                                <input type="text" class="form-control" placeholder="From" name="preiodFrom" id="periodFrom">
-                                <input type="text" class="form-control" placeholder="To" name="periodTo" id="periodTo">
+                                <input type="text" class="form-control" placeholder="From" name="periodFrom" id="periodFrom" @if(!empty($project['periodFrom'])) value="{{$project['periodFrom']}}" @endif @if(!$owner) disabled @endif>
+                                <input type="text" class="form-control" placeholder="To" name="periodTo" id="periodTo" @if(!empty($project['periodTo'])) value="{{$project['periodTo']}}" @endif @if(!$owner) disabled @endif>
                             </div>
 
                         </div>
                         <label class="col-lg-3 col-form-label" style="border-bottom: 2px solid white;" for="roi"><strong>ROI:</strong></label>
                         <div class="col-lg-3">
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control closer-to-sign" style="outline: white; border: 2px solid white;" placeholder="0" id="roi" name="roi">
+                                <input type="number" class="form-control closer-to-sign" style="outline: white; border: 2px solid white;" @if(!empty($project['roi'])) value="{{$project['roi']}}" @endif placeholder="0" id="roi" name="roi" readonly>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-currency-dollar"></i>
                                 </div>
@@ -102,7 +106,7 @@
                     <div class="row mb-3">
                         <label class="col-lg-6 col-form-label" for="transactionAvoided">Amount of fraudulent transaction avoided:</label>
                         <div class="col-lg-6">
-                            <input type="number" placeholder="0" step="1" id="transactionAvoided" name="transactionAvoided" class="form-control">
+                            <input type="number" placeholder="0" step="1" id="transactionAvoided" onchange="calculateFraudAvoidedBy()" name="transactionAvoided" class="form-control" value="{{$scamNumbers}}"  readonly>
                         </div>
                     </div>
 
@@ -110,7 +114,7 @@
                         <label class="col-lg-6 col-form-label" for="averageValOfTrans">Average value of fraudulent transaction:</label>
                         <div class="col-lg-6">
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control closer-to-sign" placeholder="0" id="averageValOfTrans" name="averageValOfTrans">
+                                <input type="number" class="form-control closer-to-sign" placeholder="0" id="averageValOfTrans" onchange="calculateFraudAvoidedBy()" name="averageValOfTrans" @if(!empty($project['averageValOfTrans'])) value="{{$project['averageValOfTrans']}}" @else value="15.00" @endif @if(!$owner) readonly @endif>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-currency-dollar"></i>
                                 </div>
@@ -122,7 +126,7 @@
                         <label class="col-lg-6 col-form-label" for="fraudAvoidedBy">Fraud avoided by XXXX:</label>
                         <div class="col-lg-6">
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control closer-to-sign" placeholder="0" id="fraudAvoidedBy" name="fraudAvoidedBy">
+                                <input type="number" class="form-control closer-to-sign" placeholder="0" id="fraudAvoidedBy" name="fraudAvoidedBy" @if(!empty($project['fraudAvoidedBy'])) value="{{$project['fraudAvoidedBy']}}" @endif readonly>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-currency-dollar"></i>
                                 </div>
@@ -139,7 +143,7 @@
                         <label class="col-lg-6 col-form-label" for="monthlyCost">Monthly cost of Telesign solution:</label>
                         <div class="col-lg-6">
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control closer-to-sign" placeholder="0" id="monthlyCost" name="monthlyCost">
+                                <input type="number" class="form-control closer-to-sign" placeholder="0" id="monthlyCost" onchange="calculateTotalCost()" name="monthlyCost" @if(!empty($project['monthlyCost'])) value="{{$project['monthlyCost']}}" @else value="5000" @endif @if(!$owner) readonly @endif>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-currency-dollar"></i>
                                 </div>
@@ -151,7 +155,7 @@
                         <label class="col-lg-6 col-form-label" for="otherCosts">Other costs:</label>
                         <div class="col-lg-6">
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control closer-to-sign" step="0.01" placeholder="0" id="otherCosts" name="otherCosts">
+                                <input type="number" class="form-control closer-to-sign" step="0.01" placeholder="0" id="otherCosts" onchange="calculateTotalCost()" name="otherCosts" @if(!empty($project['otherCosts'])) value="{{$project['otherCosts']}}" @else value="0" @endif @if(!$owner) readonly @endif>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-currency-dollar"></i>
                                 </div>
@@ -163,7 +167,7 @@
                         <label class="col-lg-6 col-form-label" for="totalCost">Total cost:</label>
                         <div class="col-lg-6">
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control closer-to-sign" placeholder="0" id="totalCost" name="totalCost">
+                                <input type="number" class="form-control closer-to-sign" placeholder="0" id="totalCost" name="totalCost" @if(!empty($project['totalCost'])) value="{{$project['totalCost']}}" @endif readonly>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-currency-dollar"></i>
                                 </div>
@@ -180,7 +184,7 @@
                         <label class="col-lg-6 col-form-label" for="costPerPhone">Cost per phone number lookup:</label>
                         <div class="col-lg-3">
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control closer-to-sign" placeholder="0" step="0.001" id="costPerPhone" name="costPerPhone">
+                                <input type="number" class="form-control closer-to-sign" placeholder="0" step="0.001" id="costPerPhone" onchange="calculatePerPhone()" name="costPerPhone" @if(!empty($project['costPerPhone'])) value="{{$project['costPerPhone']}}" @else value="0.005" @endif @if(!$owner) readonly @endif>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-currency-dollar"></i>
                                 </div>
@@ -188,7 +192,7 @@
                         </div>
                         <div class="col-lg-3">
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control closer-to-sign" placeholder="0" step="0.1" id="totalPerPhone" name="totalPerPhone">
+                                <input type="number" class="form-control closer-to-sign" placeholder="0" step="0.001" id="totalPerPhone" name="totalPerPhone" @if(!empty($project['totalPerPhone'])) value="{{$project['totalPerPhone']}}" @endif @if(!$owner) readonly @endif>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-currency-dollar"></i>
                                 </div>
@@ -199,7 +203,7 @@
                         <label class="col-lg-6 col-form-label" for="averageSMS">Average SMS tansaction cost:</label>
                         <div class="col-lg-3">
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control closer-to-sign" placeholder="0" step="0.010" id="averageSMS" name="averageSMS">
+                                <input type="number" class="form-control closer-to-sign" placeholder="0" step="0.010" id="averageSMS" onchange="calculateTotalSMS()" name="averageSMS" @if(!empty($project['averageSMS'])) value="{{$project['averageSMS']}}" @else value="0.060" @endif @if(!$owner) readonly @endif>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-currency-dollar"></i>
                                 </div>
@@ -207,7 +211,7 @@
                         </div>
                         <div class="col-lg-3">
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control closer-to-sign" placeholder="0" step="0.10" id="totalSMS" name="totalSMS">
+                                <input type="number" class="form-control closer-to-sign" placeholder="0" step="0.010" id="totalSMS" name="totalSMS" @if(!empty($project['totalSMS'])) value="{{$project['totalSMS']}}" @endif @if(!$owner) readonly @endif>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-currency-dollar"></i>
                                 </div>
@@ -218,7 +222,7 @@
                         <label class="col-lg-6 col-form-label" for="otherSavings">Other savings:</label>
                         <div class="col-lg-6">
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control closer-to-sign" placeholder="0" step="0.01" id="otherSavings" name="otherSavings">
+                                <input type="number" class="form-control closer-to-sign" placeholder="0" step="0.01" id="otherSavings" name="otherSavings" @if(!empty($project['otherSavings'])) value="{{$project['otherSavings']}}" @else value="0.00" @endif @if(!$owner) readonly @endif>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-currency-dollar"></i>
                                 </div>
@@ -230,7 +234,7 @@
                         <label class="col-lg-6 col-form-label" for="totalSavings">Total savings:</label>
                         <div class="col-lg-6">
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control closer-to-sign" placeholder="0" step="0.1" id="totalSavings" name="totalSavings">
+                                <input type="number" class="form-control closer-to-sign" placeholder="0" step="0.1" id="totalSavings" name="totalSavings" @if(!empty($project['totalSavings'])) value="{{$project['totalSavings']}}" @endif readonly>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-currency-dollar"></i>
                                 </div>
@@ -240,14 +244,16 @@
 
                 </fieldset>
 
-                <div class="row d-flex flex-row-reverse">
-                    <div class="col-lg-4" style="text-align: right;">
-                        <button type="submit" class="btn btn-primary">
-                            Save project
-                            <i class="ph-pencil-line ms-2"></i>
-                        </button>
+                @if($owner)
+                    <div class="row d-flex flex-row-reverse">
+                        <div class="col-lg-4" style="text-align: right;">
+                            <button type="submit" class="btn btn-primary">
+                                Save project
+                                <i class="ph-pencil-line ms-2"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
+                @endif
             </form>
 
     </div>
