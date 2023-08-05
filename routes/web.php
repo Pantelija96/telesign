@@ -40,5 +40,3 @@ Route::get('/mongo', [FrontendController::class, 'mongo']);
 
 Route::post('/uploadnumbercsv', [BackendController::class, 'uploadNumberCsv'])->name('uploadNumbersCsv');
 Route::post('/login', [BackendController::class, 'login'])->name('login');
-
-
