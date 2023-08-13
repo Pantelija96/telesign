@@ -209,7 +209,7 @@
 
             <div class="row">
                 <div class="col-lg-4">
-                    <div class="card">
+                    <div class="card" style="min-height: 700px;">
                         <div class="card-header">
                             <h5 class="mb-0">Countries</h5>
                         </div>
