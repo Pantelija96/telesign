@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Codes;
 use App\Models\Number;
+use App\Imports\NumberImport;
 use App\Models\Project;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\LazyCollection;
 use MongoDB\BSON\ObjectId;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class BackendController extends Controller
@@ -85,7 +87,6 @@ class BackendController extends Controller
     }
 
     public function editNumber(Request $request){
-//        return response()->json(array(['msg'=> "Some error occurred!", 'error' => $request->all()]), 500);
         $number = $request->get('number');
         $email = $request->get('email');
         $ip = $request->get('ip');
@@ -121,7 +122,6 @@ class BackendController extends Controller
     }
 
     public function uploadCsv(Request $request){
-        //return dd($request->all());
         $request->validate([
             'csvFile' => 'required',
             'projectId' => 'required'
@@ -133,19 +133,42 @@ class BackendController extends Controller
         $file->move(public_path('csvUploads'), $fileName);
 
         $csvFile = file(public_path('csvUploads/'.$fileName));
-        $dataArray = [];
-        foreach ($csvFile as $line) {
-            $obj = [
-                'number' => str_getcsv($line)[0],
-                'email' => "",
-                'ip' => "",
-                'scores' => [],
-                'projectId' => $request->get('projectId')
-            ];
-            $dataArray[] = $obj;
-        }
-        array_shift($dataArray);
 
+        $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+        
+        $dataArray = [];
+
+        if($ext == "xlsx"){
+            $array = Excel::toArray(new NumberImport, public_path('csvUploads/'.$fileName));
+            foreach($array[0] as $row){
+                $number = $row[0];
+                if($number == null){
+                    continue;
+                }
+                $obj = [
+                    'number' => $number,
+                    'email' => "",
+                    'ip' => "",
+                    'scores' => [],
+                    'projectId' => $request->get('projectId')
+                ];
+                $dataArray[] = $obj;
+            }
+        }
+        else{
+            foreach ($csvFile as $line) {
+                // return dd($line);
+                $obj = [
+                    'number' => str_getcsv($line)[0],
+                    'email' => "",
+                    'ip' => "",
+                    'scores' => [],
+                    'projectId' => $request->get('projectId')
+                ];
+                $dataArray[] = $obj;
+            }
+            array_shift($dataArray);
+        }
 
         $response = Number::insert($dataArray);
 
@@ -208,7 +231,7 @@ class BackendController extends Controller
     }
 
     public function scoreNumbers(Request $request){
-//        set_time_limit(0);
+        //set_time_limit(0);
         //score numbers for this project
         $id = $request->get('projectId');
         $project =  Project::where('_id', '=', $id)->first();
@@ -454,6 +477,13 @@ class BackendController extends Controller
 
     }
 
+    public function deleteProject($id){
+        Project::where('_id', '=', $id)->delete();
+        $numberOfUnsaved = session()->get('numberOfUnsaved');
+        session()->put('numberOfUnsaved', $numberOfUnsaved - 1);
+        return redirect()->back();
+    }
+
 
     public function scoreNumbersTimeTesting(Request $request){
         set_time_limit(0);
@@ -520,14 +550,14 @@ class BackendController extends Controller
                 "carrierName" => $apiResult->carrier->name,
                 "riskLevel" => $apiResult->risk->level,
                 "recommendation" => $apiResult->risk->recommendation,
-                "riskInsights" => $apiResult->risk_insights
+                // "riskInsights" => $apiResult->risk_insights ?? "" : $apiResult->risk_insights
             ];
 
             Number::where('_id', '=', $numberId)->update([
                 'scores' => $numberScore
             ]);
 
-//            return dd($apiResult->risk->level);
+            //            return dd($apiResult->risk->level);
 
             switch ($apiResult->risk->level){
                 case "very_low":

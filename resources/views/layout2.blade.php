@@ -60,7 +60,7 @@
                     <a href="{{url('/home2').'/0/unsaved'}}" class="dropdown-item">
                         <i class="ph-warning-circle me-2"></i>
                         Unsaved projects
-                        <span class="badge bg-warning rounded-pill ms-auto">{{session()->all()['numberOfUnsaved']}}</span>
+                        <span class="badge @if(session()->all()['numberOfUnsaved'] > 0) bg-warning @else bg-success @endif rounded-pill ms-auto">{{session()->all()['numberOfUnsaved']}}</span>
                     </a>
                     <div class="dropdown-divider"></div>
                     <a href="{{url('/logout')}}" class="dropdown-item">

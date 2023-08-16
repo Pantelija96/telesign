@@ -133,7 +133,7 @@
                                             </a>
 
                                             <div class="dropdown-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item"><i class="ph-calendar-check me-2"></i> Check</a>
+                                                <a href="{{url('/project').'/'.$project['_id']}}" class="dropdown-item"><i class="ph-calendar-check me-2"></i> Check</a>
 {{--                                                <a href="#" class="dropdown-item"><i class="ph-x me-2"></i> Remove / don't show me</a>--}}
                                             </div>
                                         </div>
@@ -182,8 +182,8 @@
                                             </a>
 
                                             <div class="dropdown-menu dropdown-menu-end">
-                                                <a href="#" class="dropdown-item"><i class="ph-calendar-check me-2"></i> Check</a>
-                                                <a href="#" class="dropdown-item"><i class="ph-x me-2"></i> Remove / delete this project</a>
+                                                <a href="{{url('/project').'/'.$project['_id']}}" class="dropdown-item"><i class="ph-calendar-check me-2"></i> Check</a>
+                                                <a href="{{url('/deleteProject').'/'.$project['_id']}}" class="dropdown-item"><i class="ph-x me-2"></i> Remove / delete this project</a>
                                             </div>
                                         </div>
                                     </div>
@@ -282,9 +282,9 @@
                                         </a>
 
                                         <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="#" class="dropdown-item"><i class="ph-calendar-check me-2"></i> Check</a>
+                                            <a href="{{url('/project').'/'.$project['_id']}}" class="dropdown-item"><i class="ph-calendar-check me-2"></i> Check</a>
                                             @if($project['owner'] === session()->get('user')['_id'])
-                                                <a href="#" class="dropdown-item"><i class="ph-x me-2"></i> Remove / delete this project</a>
+                                                <a href="{{url('/deleteProject').'/'.$project['_id']}}" class="dropdown-item"><i class="ph-x me-2"></i> Remove / delete this project</a>
                                             @endif
                                         </div>
                                     </div>

@@ -23,6 +23,7 @@ Route::get('/deleteProjects', [BackendController::class, 'deleteProjects']);
 
 Route::get('/home2/{view?}/{status?}', [FrontendController::class, 'home'])->middleware('basicAuth');
 Route::get('/project/{id?}', [FrontendController::class, 'project'])->middleware('basicAuth');
+Route::get('/deleteProject/{id}', [BackendController::class, 'deleteProject'])->middleware('basicAuth');
 Route::get('/roi/{id?}', [FrontendController::class, 'roi'])->middleware('basicAuth');
 Route::get('/profile/{id}', [FrontendController::class, 'profile'])->middleware('basicAuth');
 Route::get('/open/{id}/{owner}', [FrontendController::class, 'openProject'])->middleware('basicAuth');
