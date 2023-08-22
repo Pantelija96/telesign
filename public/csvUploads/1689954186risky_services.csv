@@ -1,8 +1,0 @@
-code,Name,Meaning,Risk,Trust
-10010,low activity,Not enough activity or attributes to classify the transaction as either risky or trustworthy.
-10020,low regular activity,Trustworthy category, based on past behavior.
-10021,regular activity,Most trustworthy category, based on past behavior.
-10030,low-risk irregular activity,Risky category, based on past behavior.
-10031,medium-risk irregular activity,High-risk category, based on past behavior.
-10032,high-risk irregular activity,Highest-risk category, based on past behavior.
-10040,irregular number type,This number has risky static attributes (like VOIP phone type or being on a blocklist).

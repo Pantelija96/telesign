@@ -1,8 +1,0 @@
-code,Name,Meaning,Risk,Trust
-22001,seen in the last 1 day,This number was seen in verification traffic in the last 1 day.,FALSE,FALSE
-22007,seen in the last 7 days,This number was seen in verification traffic in the last 7 days.,FALSE,FALSE
-22015,seen in the last 15 days,This number was seen in verification traffic in the last 15 days.,FALSE,FALSE
-22101,seen in the last 1 month,This number was seen in verification traffic in the last 1 month.,FALSE,FALSE
-22102,seen in the last 2 months,This number was seen in verification traffic in the last 2 months.,FALSE,FALSE
-22103,seen in the last 3 months,This number was seen in verification traffic in the last 3 months.,FALSE,FALSE
-22203,seen more than 3 months ago,This number was not seen in verification traffic in the last 3 months.,FALSE,FALSE

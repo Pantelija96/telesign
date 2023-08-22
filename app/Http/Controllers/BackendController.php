@@ -543,21 +543,23 @@ class BackendController extends Controller
             }
 
             $numberScore = [
-                "score" => $apiResult->risk->score,
-                "type" => $apiResult->phone_type->description,
-                "country" => $apiResult->location->country->name,
-                "countryIso" => $apiResult->location->country->iso2,
-                "carrierName" => $apiResult->carrier->name,
-                "riskLevel" => $apiResult->risk->level,
-                "recommendation" => $apiResult->risk->recommendation,
-                // "riskInsights" => $apiResult->risk_insights ?? "" : $apiResult->risk_insights
+                "score" => $apiResult->risk->score ? $apiResult->risk->score : 1,
+                "type" => $apiResult->phone_type->description ? $apiResult->phone_type->description : "No description",
+                "country" => $apiResult->location->country->name ? $apiResult->location->country->name : "No country name",
+                "countryIso" => $apiResult->location->country->iso2 ? $apiResult->location->country->iso2 : "No iso",
+                "carrierName" => $apiResult->carrier->name ? $apiResult->carrier->name : "No carrier",
+                "riskLevel" => $apiResult->risk->level ? $apiResult->risk->level : "No risk level",
+                "recommendation" => $apiResult->risk->recommendation ? $apiResult->risk->recommendation : "No recommendation",
+                "riskInsights" => $apiResult->risk_insights ? $apiResult->risk_insights : "No risk insights"
             ];
+
+            // return dd($numberScore);
 
             Number::where('_id', '=', $numberId)->update([
                 'scores' => $numberScore
             ]);
 
-            //            return dd($apiResult->risk->level);
+            //return dd($apiResult->risk->level);
 
             switch ($apiResult->risk->level){
                 case "very_low":
@@ -582,13 +584,13 @@ class BackendController extends Controller
                     break;
             }
 
-            $countryIso = $apiResult->location->country->iso2;
-            $typeOfNumber = $apiResult->phone_type->description;
+            $countryIso = $apiResult->location->country->iso2 ? $apiResult->location->country->iso2 : "No country Iso";
+            $typeOfNumber = $apiResult->phone_type->description ? $apiResult->phone_type->description : "No number type";
 
             if(!isset($countryAndPhoneType[$countryIso])){
                 $newCountryObj = [
                     'countryCode' => $countryIso,
-                    'countryName' => $apiResult->location->country->name,
+                    'countryName' => $apiResult->location->country->name ? "" : $apiResult->location->country->name,
                     'numberOfNumbers' => 0,
                     'scores' => [],
                     'numbers' => []
@@ -627,6 +629,8 @@ class BackendController extends Controller
         curl_close($curl);
 
         $projectScore['countryAndPhoneType'] = $countryAndPhoneType;
+
+        //return dd($projectScore);
 
         $project->update([
             'projectScore' => $projectScore
