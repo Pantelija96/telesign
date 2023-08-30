@@ -343,7 +343,7 @@
 
             </div>
 
-            <div class="row">
+            <div class="row" id="codeMapping">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="mb-0">Code mapping</h5>

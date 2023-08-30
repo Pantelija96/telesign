@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\LazyCollection;
 use MongoDB\BSON\ObjectId;
 use Illuminate\Support\Facades\Http;
-// use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+
+
 
 
 class BackendController extends Controller
@@ -138,7 +140,7 @@ class BackendController extends Controller
         
         $dataArray = [];
 
-        if($ext == "xlsx"){
+        if($ext == "xlsx" || $ext == "xls"){
             // $array = Excel::toArray(new NumberImport, public_path('csvUploads/'.$fileName));
             // foreach($array[0] as $row){
             //     $number = $row[0];
@@ -154,6 +156,21 @@ class BackendController extends Controller
             //     ];
             //     $dataArray[] = $obj;
             // }
+            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load(public_path('csvUploads/'.$fileName));
+            $sheet = $spreadsheet->getSheet($spreadsheet->getFirstSheetIndex());
+            $data = $sheet->toArray();
+            foreach($data as $line){
+                $obj = [
+                    'number' => $line[0],
+                    'email' => "",
+                    'ip' => "",
+                    'scores' => [],
+                    'projectId' => $request->get('projectId')
+                ];
+                $dataArray[] = $obj;
+            }
         }
         else{
             foreach ($csvFile as $line) {
@@ -545,7 +562,8 @@ class BackendController extends Controller
             }
 
             // if(!isset($apiResult->risk_insights)){
-            //     return dd($apiResult);
+            //     var_dump($number); //12242635303
+            //     return dd($apiResult); 
             // }
 
             $numberScore = [

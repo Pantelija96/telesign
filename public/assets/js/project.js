@@ -1031,46 +1031,53 @@ function showOneNumberScores(numberId){
             $("#recommendationTitle").addClass('bg-'+data[0][0].scores.riskLevel);
             document.getElementById("oneScore").setAttribute("onclick","showHideScoreNav('one')");
 
-            var codes = [
-                ...data[0][0].scores.riskInsights.a2p,
-                ...data[0][0].scores.riskInsights.category,
-                ...data[0][0].scores.riskInsights.email,
-                ...data[0][0].scores.riskInsights.ip,
-                ...data[0][0].scores.riskInsights.number_type,
-                // ...data[0][0].scores.riskInsights.p2p,
-            ];
+            if(data[0][0].scores.riskInsights.a2p != null){
+                $('#codeMapping').show();
+                var codes = [
+                    ...data[0][0].scores.riskInsights.a2p,
+                    ...data[0][0].scores.riskInsights.category,
+                    ...data[0][0].scores.riskInsights.email,
+                    ...data[0][0].scores.riskInsights.ip,
+                    ...data[0][0].scores.riskInsights.number_type,
+                    // ...data[0][0].scores.riskInsights.p2p,
+                ];
 
-            var dataSet = [];
+                var dataSet = [];
 
-            $.ajax({
-                type:'GET',
-                url:'/getCodes',
-                data:{
-                    codes: codes,
-                },
-                success:function(data){
-                    var mappingTable = $('.codeMappingDataT');
-                    if($.fn.DataTable.isDataTable( '.codeMappingDataT' )){
-                        mappingTable.DataTable().destroy();
+                $.ajax({
+                    type:'GET',
+                    url:'/getCodes',
+                    data:{
+                        codes: codes,
+                    },
+                    success:function(data){
+                        var mappingTable = $('.codeMappingDataT');
+                        if($.fn.DataTable.isDataTable( '.codeMappingDataT' )){
+                            mappingTable.DataTable().destroy();
+                        }
+
+                        for (let i = 0; i < data[0][0].length; i++) {
+                            dataSet.push(data[0][0][i]);
+                        }
+
+                        // Initialize
+                        mappingTable.dataTable({
+                            data: dataSet,
+                            columnDefs: []
+                        });
+                    },
+                    error: function (error){
+                        sweetAlert('Some unexpected error happened!', "Error", 'error');
+                        console.log(error);
                     }
-
-                    for (let i = 0; i < data[0][0].length; i++) {
-                        dataSet.push(data[0][0][i]);
-                    }
-
-                    // Initialize
-                    mappingTable.dataTable({
-                        data: dataSet,
-                        columnDefs: []
-                    });
-                },
-                error: function (error){
-                    sweetAlert('Some unexpected error happened!', "Error", 'error');
-                    console.log(error);
-                }
-            });
-
-
+                });
+            }
+            else{
+                $('#codeMapping').hide();
+            }
+            
+            
+            
         },
         error: function (error){
             sweetAlert('Some unexpected error happened!', "Error", 'error');
