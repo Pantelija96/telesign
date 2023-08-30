@@ -31,6 +31,126 @@
 
 @section('content')
 
+    <div class="card">
+        <div class="table-responsive p-1">
+            <table class="table table-dark table-bordered table-striped table-hover text-center">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Risk Band</th>
+                        <th>Total volume</th>
+                        <th>%</th>
+                        <th>True positive rate</th>
+                        <th>Fraud</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bg-very-low">1</td>
+                        <td>Very-low</td>
+                        <td>
+                            <p id="very-low">{{$project['projectScore']['riskLevelBreakdown']['veryLow']}}</p>
+                            <input type="hidden" id="veryLowNumbers" name="veryLowNumbers" value="{{$project['projectScore']['riskLevelBreakdown']['veryLow']}}"/>
+                        </td>
+                        <td>
+                            {{round(floatval(($project['projectScore']['riskLevelBreakdown']['veryLow']/$numberOfNumbers)*100),2)}}
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="bg-low">2</td>
+                        <td>Low</td>
+                        <td>
+                            <p id="low">{{$project['projectScore']['riskLevelBreakdown']['low']}}</p>
+                            <input type="hidden" id="lowNumbers" name="lowNumbers" value="{{$project['projectScore']['riskLevelBreakdown']['low']}}"/>
+                        </td>
+                        <td>
+                            {{round(floatval(($project['projectScore']['riskLevelBreakdown']['low']/$numberOfNumbers)*100),2)}}
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="bg-medium-low">3</td>
+                        <td>Medium-low</td>
+                        <td>
+                            <p id="medium-low">{{$project['projectScore']['riskLevelBreakdown']['mediumLow']}}</p>
+                            <input type="hidden" id="mediumLowNumbers" name="mediumLowNumbers" value="{{$project['projectScore']['riskLevelBreakdown']['mediumLow']}}"/>
+                        </td>
+                        <td>
+                            {{round(floatval(($project['projectScore']['riskLevelBreakdown']['mediumLow']/$numberOfNumbers)*100),2)}}
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="bg-medium">4</td>
+                        <td>Medium</td>
+                        <td>
+                            <p id="medium">{{$project['projectScore']['riskLevelBreakdown']['medium']}}</p>
+                            <input type="hidden" id="mediumNumbers" name="mediumNumbers" value="{{$project['projectScore']['riskLevelBreakdown']['medium']}}"/>
+                        </td>
+                        <td>
+                            {{round(floatval(($project['projectScore']['riskLevelBreakdown']['medium']/$numberOfNumbers)*100),2)}}
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="bg-high">5</td>
+                        <td>High</td>
+                        <td>
+                            <p id="high">{{$project['projectScore']['riskLevelBreakdown']['high']}}</p>
+                            <input type="hidden" id="highNumbers" name="highNumbers" value="{{$project['projectScore']['riskLevelBreakdown']['high']}}"/>
+                        </td>
+                        <td>
+                            {{round(floatval(($project['projectScore']['riskLevelBreakdown']['high']/$numberOfNumbers)*100),2)}}
+                        </td>
+                        <td>
+                            <input type="number" class="form-control closer-to-sign" id="highPositiveRate" name="highPositiveRate" value="50" max="100" min="0" step="1" style="text-align:center;" onchange="calculateFraudNumbers()">
+                        </td>
+                        <td>
+                            <input type="number" class="form-control closer-to-sign" id="highPositiveRateNumbers" name="highPositiveRateNumbers" readonly style="text-align:center;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bg-very-high">6</td>
+                        <td>Very-high</td>
+                        <td>
+                            <p id="very-high">{{$project['projectScore']['riskLevelBreakdown']['veryHigh']}}</p>
+                            <input type="hidden" id="veryHighNumbers" name="veryHighNumbers" value="{{$project['projectScore']['riskLevelBreakdown']['veryHigh']}}"/>
+                        </td>
+                        <td>
+                            {{round(floatval(($project['projectScore']['riskLevelBreakdown']['veryHigh']/$numberOfNumbers)*100),2)}}
+                        </td>
+                        <td>
+                            <input type="number" class="form-control closer-to-sign" id="veryHighPositiveRate" name="veryHighPositiveRate" value="90" max="100" min="0" step="1" style="text-align:center;" onchange="calculateFraudNumbers()">
+                        </td>
+                        <td>
+                            <input type="number" class="form-control closer-to-sign" id="veryHighPositiveRateNumbers" name="veryHighPositiveRateNumbers" readonly style="text-align:center;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td></td>
+                        <td>
+                            <p id="totalNumbers">{{$numberOfNumbers}}</p>
+                            <input type="hidden" id="totalNumbersHidden" name="totalNumbersHidden" value="{{$numberOfNumbers}}"/>
+                        </td>
+                        <td>100%</td>
+                        <td></td>
+                        <td>
+                            <p id="totalFraudNumbers"></p>
+                            <input type="hidden" id="totalFraudNumbersHidden" name="totalFraudNumbersHidden" value="0"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
     <div class="row">
 
             <form action="@if($owner){{route('saveProject')}}@endif" method="POST">
@@ -54,7 +174,7 @@
                                 <span class="input-group-text">
                                     <i class="ph-calendar"></i>
                                 </span>
-                                <input type="text" class="form-control pick-date-basic" name="jobDate" id="jobDate" placeholder="Pick a job date" @if(!empty($project['jobDate'])) value="{{$project['jobDate']}}" @endif @if(!$owner) disabled @endif>
+                                <input type="text" class="form-control pick-date-basic" name="jobDate" id="jobDate" placeholder="Pick a job date" @if(!empty($project['jobDate'])) value="{{$project['jobDate']}}" @else value="{{date('m/d/Y')}}" @endif @if(!$owner) disabled @endif>
                             </div>
                         </div>
                     </div>
@@ -68,7 +188,7 @@
                         <div class="col-lg-3">
 
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control" placeholder="0" id="periodMultiplier" name="periodMultiplier" @if(!empty($project['periodMultiplier'])) value="{{$project['periodMultiplier']}}" @else value="1" @endif @if(!$owner) readonly @endif>
+                                <input type="number" class="form-control" min="1" placeholder="1" id="periodMultiplier" name="periodMultiplier" onchange="calculateFraudNumbers()" @if(!empty($project['periodMultiplier'])) value="{{$project['periodMultiplier']}}" @else value="1" @endif @if(!$owner) readonly @endif>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-x-circle"></i>
                                 </div>
@@ -82,8 +202,8 @@
                         <div class="col-lg-3">
 
                             <div class="input-group datepicker-range-one-side">
-                                <input type="text" class="form-control" placeholder="From" name="periodFrom" id="periodFrom" @if(!empty($project['periodFrom'])) value="{{$project['periodFrom']}}" @endif @if(!$owner) disabled @endif>
-                                <input type="text" class="form-control" placeholder="To" name="periodTo" id="periodTo" @if(!empty($project['periodTo'])) value="{{$project['periodTo']}}" @endif @if(!$owner) disabled @endif>
+                                <input type="text" class="form-control" placeholder="From" name="periodFrom" id="periodFrom" onchange="setFrom()" @if(!empty($project['periodFrom'])) value="{{$project['periodFrom']}}" @else value="{{date('m/d/Y')}}" @endif @if(!$owner) disabled @endif>
+                                <input type="text" class="form-control" placeholder="To" name="periodTo" id="periodTo" onchange="setTo()" @if(!empty($project['periodTo'])) value="{{$project['periodTo']}}" @else value="{{date('m/d/Y')}}" @endif @if(!$owner) disabled @endif>
                             </div>
 
                         </div>
@@ -106,7 +226,7 @@
                     <div class="row mb-3">
                         <label class="col-lg-6 col-form-label" for="transactionAvoided">Amount of fraudulent transaction avoided:</label>
                         <div class="col-lg-6">
-                            <input type="number" placeholder="0" step="1" id="transactionAvoided" onchange="calculateFraudAvoidedBy()" name="transactionAvoided" class="form-control" value="{{$scamNumbers}}"  readonly>
+                            <input type="number" placeholder="0" step="1" id="transactionAvoided" onchange="calculateFraudAvoidedBy()" name="transactionAvoided" class="form-control">
                         </div>
                     </div>
 
@@ -152,10 +272,22 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label class="col-lg-6 col-form-label" for="otherCosts">Other costs:</label>
+                        <label class="col-lg-6 col-form-label" for="otherCosts">Other costs - all numbers:</label>
                         <div class="col-lg-6">
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control closer-to-sign" step="0.01" placeholder="0" id="otherCosts" onchange="calculateTotalCost()" name="otherCosts" @if(!empty($project['otherCosts'])) value="{{$project['otherCosts']}}" @else value="0" @endif @if(!$owner) readonly @endif>
+                                <input type="number" class="form-control closer-to-sign" step="0.01" placeholder="0" id="otherCostsAllNumbers" onchange="calculateTotalCost()" name="otherCostsAllNumbers" @if(!empty($project['otherCostsAllNumbers'])) value="{{$project['otherCostsAllNumbers']}}" @else value="0" @endif @if(!$owner) readonly @endif>
+                                <div class="form-control-feedback-icon">
+                                    <i class="ph-currency-dollar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-lg-6 col-form-label" for="otherCosts">Other costs - fraud numbers:</label>
+                        <div class="col-lg-6">
+                            <div class="form-control-feedback form-control-feedback-start">
+                                <input type="number" class="form-control closer-to-sign" step="0.01" placeholder="0" id="otherCostsFraudNumbers" onchange="calculateTotalCost()" name="otherCostsFraudNumbers" @if(!empty($project['otherCostsFraudNumbers'])) value="{{$project['otherCostsFraudNumbers']}}" @else value="0" @endif @if(!$owner) readonly @endif>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-currency-dollar"></i>
                                 </div>
@@ -222,7 +354,7 @@
                         <label class="col-lg-6 col-form-label" for="otherSavings">Other savings:</label>
                         <div class="col-lg-6">
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="number" class="form-control closer-to-sign" placeholder="0" step="0.01" id="otherSavings" name="otherSavings" @if(!empty($project['otherSavings'])) value="{{$project['otherSavings']}}" @else value="0.00" @endif @if(!$owner) readonly @endif>
+                                <input type="number" class="form-control closer-to-sign" placeholder="0" step="0.01" id="otherSavings" onchange="calculateTotalSavings()" name="otherSavings" @if(!empty($project['otherSavings'])) value="{{$project['otherSavings']}}" @else value="0.00" @endif @if(!$owner) readonly @endif>
                                 <div class="form-control-feedback-icon">
                                     <i class="ph-currency-dollar"></i>
                                 </div>
@@ -263,7 +395,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="chart-container">
-                    <div class="chart has-fixed-height" id="line_zoom"></div>
+                    <div class="chart has-fixed-height" id="line_zoom" style="height: 600px;"></div>
                 </div>
             </div>
         </div>

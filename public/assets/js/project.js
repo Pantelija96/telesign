@@ -748,10 +748,11 @@ function mapInit(projectScore){
 
         map_world_scatter.on('click', function(params) {
             if(params.data){
+                var name = params.data.name.replace(' ', '')
                 $(".countries").removeClass('show');
                 $(".countriesLink").addClass('collapsed');
-                $("#country-"+params.data.name).addClass('show');
-                $('a[href="#country-'+params.data.name+'"]').removeClass('collapsed');
+                $("#country-"+name).addClass('show');
+                $('a[href="#country-'+name+'"]').removeClass('collapsed');
             }
         });
     }
@@ -1036,7 +1037,7 @@ function showOneNumberScores(numberId){
                 ...data[0][0].scores.riskInsights.email,
                 ...data[0][0].scores.riskInsights.ip,
                 ...data[0][0].scores.riskInsights.number_type,
-                ...data[0][0].scores.riskInsights.p2p,
+                // ...data[0][0].scores.riskInsights.p2p,
             ];
 
             var dataSet = [];

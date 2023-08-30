@@ -57,32 +57,32 @@
 
 .bg-very-low{
     --bg-opacity:1;
-    background-color:rgba(86, 163, 76, 1);
+    background-color:rgba(86, 163, 76, 1) !important;
 }
 
 .bg-low{
     --bg-opacity:1;
-    background-color:rgba(136, 214, 128, 1);
+    background-color:rgba(136, 214, 128, 1)!important;
 }
 
 .bg-medium-low{
     --bg-opacity:1;
-    background-color:rgba(246, 203, 117, 1);
+    background-color:rgba(246, 203, 117, 1)!important;
 }
 
 .bg-medium{
     --bg-opacity:1;
-    background-color:rgba(238, 147, 40, 1);
+    background-color:rgba(238, 147, 40, 1)!important;
 }
 
 .bg-high{
     --bg-opacity:1;
-    background-color:rgba(216, 122, 128, 1);
+    background-color:rgba(216, 122, 128, 1)!important;
 }
 
 .bg-very-high{
     --bg-opacity:1;
-    background-color:rgba(225, 90, 87, 1);
+    background-color:rgba(225, 90, 87, 1)!important;
 }
 
 

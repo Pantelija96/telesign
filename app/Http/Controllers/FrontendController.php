@@ -100,6 +100,8 @@ class FrontendController extends Controller
                 $this->data['owner'] = true;
             }
 
+            //return dd($this->data['numbers'][0]);
+
             return view('pages.project', $this->data);
         }
     }
@@ -121,7 +123,7 @@ class FrontendController extends Controller
         $veryHigh = $project['projectScore']['riskLevelBreakdown']['veryHigh'];
         $this->data['numberOfNumbers'] = $veryLow + $low + $mediumLow + $medium + $high + $veryHigh;
         $this->data['scamNumbers'] = $high + $veryHigh;
-//                return dd($this->data);
+            //    return dd($this->data);
         return view('pages.roi2', $this->data);
     }
 

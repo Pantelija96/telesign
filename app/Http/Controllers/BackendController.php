@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\LazyCollection;
 use MongoDB\BSON\ObjectId;
 use Illuminate\Support\Facades\Http;
-use Maatwebsite\Excel\Facades\Excel;
+// use Maatwebsite\Excel\Facades\Excel;
 
 
 class BackendController extends Controller
@@ -139,21 +139,21 @@ class BackendController extends Controller
         $dataArray = [];
 
         if($ext == "xlsx"){
-            $array = Excel::toArray(new NumberImport, public_path('csvUploads/'.$fileName));
-            foreach($array[0] as $row){
-                $number = $row[0];
-                if($number == null){
-                    continue;
-                }
-                $obj = [
-                    'number' => $number,
-                    'email' => "",
-                    'ip' => "",
-                    'scores' => [],
-                    'projectId' => $request->get('projectId')
-                ];
-                $dataArray[] = $obj;
-            }
+            // $array = Excel::toArray(new NumberImport, public_path('csvUploads/'.$fileName));
+            // foreach($array[0] as $row){
+            //     $number = $row[0];
+            //     if($number == null){
+            //         continue;
+            //     }
+            //     $obj = [
+            //         'number' => $number,
+            //         'email' => "",
+            //         'ip' => "",
+            //         'scores' => [],
+            //         'projectId' => $request->get('projectId')
+            //     ];
+            //     $dataArray[] = $obj;
+            // }
         }
         else{
             foreach ($csvFile as $line) {
@@ -538,9 +538,15 @@ class BackendController extends Controller
             $apiResult = json_decode(curl_exec($curl));
             $err = curl_error($curl);
 
+            //return dd($apiResult->location->country->name);
+
             if ($err) {
                 return dd($err);
             }
+
+            // if(!isset($apiResult->risk_insights)){
+            //     return dd($apiResult);
+            // }
 
             $numberScore = [
                 "score" => $apiResult->risk->score ? $apiResult->risk->score : 1,
@@ -550,10 +556,14 @@ class BackendController extends Controller
                 "carrierName" => $apiResult->carrier->name ? $apiResult->carrier->name : "No carrier",
                 "riskLevel" => $apiResult->risk->level ? $apiResult->risk->level : "No risk level",
                 "recommendation" => $apiResult->risk->recommendation ? $apiResult->risk->recommendation : "No recommendation",
-                "riskInsights" => $apiResult->risk_insights ? $apiResult->risk_insights : "No risk insights"
+                "riskInsights" => isset($apiResult->risk_insights) ? $apiResult->risk_insights : []
             ];
 
-            // return dd($numberScore);
+            if($numberScore['riskInsights']){
+                unset($numberScore['riskInsights']->p2p);
+            }
+
+            //return dd($numberScore);
 
             Number::where('_id', '=', $numberId)->update([
                 'scores' => $numberScore
@@ -590,7 +600,7 @@ class BackendController extends Controller
             if(!isset($countryAndPhoneType[$countryIso])){
                 $newCountryObj = [
                     'countryCode' => $countryIso,
-                    'countryName' => $apiResult->location->country->name ? "" : $apiResult->location->country->name,
+                    'countryName' => $apiResult->location->country->name ? $apiResult->location->country->name : "No country name",
                     'numberOfNumbers' => 0,
                     'scores' => [],
                     'numbers' => []

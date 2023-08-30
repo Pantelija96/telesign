@@ -1,4 +1,8 @@
+var line_zoom = null;
+var finishedLoading = false;
+
 document.addEventListener('DOMContentLoaded', function() {
+    calculateFraudNumbers();
     calculateFraudAvoidedBy();
     calculateTotalCost();
     calculateTotalSMS();
@@ -10,8 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.warn('Warning - datepicker.min.js is not loaded.');
         return;
     }
-
-
     const dpAutoHideElement = document.querySelector('.pick-date-basic');
     if(dpAutoHideElement) {
         const dpAutoHide = new Datepicker(dpAutoHideElement, {
@@ -22,8 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
             autohide: true
         });
     }
-
-
     const dpOneSideElement = document.querySelector('.datepicker-range-one-side');
     if(dpOneSideElement) {
         const dpOneSide = new DateRangePicker(dpOneSideElement, {
@@ -44,14 +44,24 @@ document.addEventListener('DOMContentLoaded', function() {
     var line_zoom_element = document.getElementById('line_zoom');
 
     if (line_zoom_element) {
+        line_zoom = echarts.init(line_zoom_element, null, { renderer: 'svg' });
 
-        var line_zoom = echarts.init(line_zoom_element, null, { renderer: 'svg' });
+        var periodFrom = $("#periodFrom").val().split('/');
+        var periodTo = $("#periodTo").val().split('/');
 
+        var dateFrom = new Date(parseInt(periodFrom[2]), parseInt(periodFrom[0])-1, parseInt(periodFrom[1]));
+        var dateTo = new Date(parseInt(periodTo[2]), parseInt(periodTo[0])-1, parseInt(periodTo[1]));
+
+        var numberOfDays = Math.round((dateTo - dateFrom) / (24 * 60 * 60 * 1000));
+
+        console.log("dateFrom",dateFrom);
+        console.log("dateTo",dateTo);
+        console.log("numberOfDays",numberOfDays);
 
         line_zoom.setOption({
 
             // Define colors
-            color: ["#d74e67", "#4fc686",  '#0092ff'],
+            color: ["#d74e67", "#4fc686"],
 
             // Global text styles
             textStyle: {
@@ -148,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 {
                     type: 'inside',
                     start: 0,
-                    end: 70
+                    end: 100
                 },
                 {
                     show: true,
@@ -189,16 +199,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     type: 'line',
                     smooth: true,
                     symbol: 'circle',
-                    symbolSize: 8,
-                    data: [5000,5000,5000,5000,5000,5000]
+                    symbolSize: 18,
+                    data: [5000,5000,5000,5000,5000,5000],
+                    lineStyle: {
+                        width: 8
+                    },
                 },
                 {
                     name: 'Savings',
                     type: 'line',
                     smooth: true,
                     symbol: 'circle',
-                    symbolSize: 8,
-                    data: [1000,3000,5000,7000,9000,11000]
+                    symbolSize: 18,
+                    data: [1000,3000,5000,7000,9000,11000],
+                    lineStyle: {
+                        width: 8
+                    },
                 }
             ]
         });
@@ -222,37 +238,88 @@ document.addEventListener('DOMContentLoaded', function() {
             triggerChartResize();
         }, 200);
     });
-});
 
+
+    finishedLoading = true;
+});
+function calculateFraudNumbers(){
+    var periodMultiplier = parseInt($("#periodMultiplier").val());
+
+    var veryLowNumbers = parseInt($("#veryLowNumbers").val()) * periodMultiplier;
+    var lowNumbers = parseInt($("#lowNumbers").val()) * periodMultiplier;
+    var mediumLow = parseInt($("#mediumLowNumbers").val()) * periodMultiplier;
+    var mediumNumbers = parseInt($("#mediumNumbers").val()) * periodMultiplier;
+    var highNumbers = parseInt($("#highNumbers").val()) * periodMultiplier;
+    var veryHighNumbers = parseFloat($("#veryHighNumbers").val()) * periodMultiplier;
+    var totalNumbers = veryLowNumbers + lowNumbers + mediumLow + mediumNumbers + highNumbers + veryHighNumbers;
+
+    var highNumbersPositiveRate = parseInt($("#highPositiveRate").val());
+    var veryHighNumbersPositiveRate = parseInt($("#veryHighPositiveRate").val());
+
+    var highRate = Math.round(highNumbers * (highNumbersPositiveRate/100));
+    var veryHighRate = Math.round(veryHighNumbers * (veryHighNumbersPositiveRate/100));
+
+    $("#very-low").html(veryLowNumbers);
+    $("#low").html(lowNumbers);
+    $("#medium-low").html(mediumLow);
+    $("#medium").html(mediumNumbers);
+    $("#high").html(highNumbers);
+    $("#very-high").html(veryHighNumbers);
+    $("#totalNumbers").html(totalNumbers);
+
+    $("#highPositiveRateNumbers").val(highRate);
+    $("#veryHighPositiveRateNumbers").val(veryHighRate);
+    $("#totalFraudNumbers").html(highRate+veryHighRate);
+    $("#totalFraudNumbersHidden").val(highRate+veryHighRate);
+    $("#transactionAvoided").val(highRate+veryHighRate);
+    $("#totalNumbersHidden").val(totalNumbers);
+    if(finishedLoading){
+        calculateFraudAvoidedBy();
+        calculateTotalCost();
+    }
+}
 function calculateFraudAvoidedBy() {
-    var scamNumbers = parseInt($("#scamNumbers").val());
+    var scamNumbers = parseInt($("#transactionAvoided").val());
     var averageValue = parseFloat($("#averageValOfTrans").val());
 
     var fraudAvoidedBy = scamNumbers * averageValue;
     $("#fraudAvoidedBy").val(fraudAvoidedBy);
 
-    calculateROI();
+    if(finishedLoading){
+        calculateTotalSMS();
+        calculateROI();
+    }
 }
 function calculateTotalCost(){
-    var numberOfNumbers = parseInt($("#numberOfNumbers").val());
+    var numberOfNumbers = parseInt($("#totalNumbersHidden").val());
     var monthlyCost = parseFloat($("#monthlyCost").val());
-    var otherCosts = parseFloat($("#otherCosts").val());
+    var otherCostsAllNumbers = parseFloat($("#otherCostsAllNumbers").val());
+    var otherCostsFraudNumbers = parseFloat($("#otherCostsFraudNumbers").val());
 
-    var totalCost = monthlyCost + otherCosts * numberOfNumbers;
+    var highPositiveRateNumbers = parseInt($("#highPositiveRateNumbers").val());
+    var veryHighPositiveRateNumbers = parseInt($("#veryHighPositiveRateNumbers").val());
+    var fraudNumbers = highPositiveRateNumbers + veryHighPositiveRateNumbers;
+
+    var totalCost = monthlyCost + otherCostsAllNumbers*numberOfNumbers + fraudNumbers*otherCostsFraudNumbers;
+
     $("#totalCost").val(totalCost);
 
-    calculateROI();
+    if(finishedLoading){
+        calculateROI();
+    }
 }
 function calculateTotalSMS(){
-    var scamNumbers = parseInt($("#scamNumbers").val());
+    var highPositiveRateNumbers = parseInt($("#highPositiveRateNumbers").val());
+    var veryHighPositiveRateNumbers = parseInt($("#veryHighPositiveRateNumbers").val());
+    var fraudNumbers = highPositiveRateNumbers + veryHighPositiveRateNumbers;
     var averageSMS = parseFloat($("#averageSMS").val());
 
-    var totalSMS = averageSMS * scamNumbers;
+    var totalSMS = averageSMS * fraudNumbers;
     $("#totalSMS").val(totalSMS);
     calculateTotalSavings();
 }
 function calculatePerPhone(){
-    var numberOfNumbers = parseInt($("#numberOfNumbers").val());
+    var numberOfNumbers = parseInt($("#totalNumbersHidden").val());
     var costPerPhone = parseFloat($("#costPerPhone").val());
 
     var totalPerPhone = costPerPhone * numberOfNumbers;
@@ -262,11 +329,13 @@ function calculatePerPhone(){
 function calculateTotalSavings(){
     var savingsPhone = parseFloat($("#totalPerPhone").val());
     var savingsSms = parseFloat($("#totalSMS").val());
+    var otherSavings = parseFloat($("#otherSavings").val());
 
-    var totalSavings = savingsPhone + savingsSms;
+    var totalSavings = savingsPhone + savingsSms + otherSavings;
     $("#totalSavings").val(totalSavings);
-
-    calculateROI();
+    if(finishedLoading){
+        calculateROI();
+    }
 }
 function calculateROI(){
     //fraudAvoidedBy
@@ -276,9 +345,16 @@ function calculateROI(){
     var totalCost = parseFloat($("#totalCost").val());
 
     var roi = fraudAvoidedBy - totalCost + totalSavings;
-    console.log("fraudAvoidedBy", fraudAvoidedBy);
-    console.log("totalCost", totalCost);
-    console.log("totalSavings", totalSavings);
-    console.log("roi", roi);
+    // console.log("fraudAvoidedBy", fraudAvoidedBy);
+    // console.log("totalCost", totalCost);
+    // console.log("totalSavings", totalSavings);
+    // console.log("roi", roi);
+    drawLines();
     $("#roi").val(roi);
+}
+
+
+
+function drawLines(){
+    console.log(line_zoom);
 }

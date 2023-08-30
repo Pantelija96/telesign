@@ -208,7 +208,7 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-4 col-md-8">
                     <div class="card" style="min-height: 700px;">
                         <div class="card-header">
                             <h5 class="mb-0">Countries</h5>
@@ -220,14 +220,14 @@
                                     <div class="card border shadow-none">
                                         <div class="card-header">
                                             <h6 class="mb-0">
-                                                <a data-bs-toggle="collapse" class="d-flex align-items-center text-body countriesLink" href="#country-{{$country['countryCode']}}">
+                                                <a data-bs-toggle="collapse" class="d-flex align-items-center text-body countriesLink" href="#country-{{str_replace(' ', '',$country['countryName'])}}">
                                                     {{$country['countryName']}}
                                                     <i class="ph-caret-down collapsible-indicator ms-auto"></i>
                                                 </a>
                                             </h6>
                                         </div>
 
-                                        <div id="country-{{$country['countryCode']}}" class="collapse show countries">
+                                        <div id="country-{{str_replace(' ', '',$country['countryName'])}}" class="collapse show countries">
                                             <div class="card-body chart-container">
                                                 <div class="chart has-fixed-height" id="{{$country['countryName']}}Chart"></div>
                                             </div>
