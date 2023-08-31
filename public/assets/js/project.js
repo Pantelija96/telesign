@@ -829,6 +829,67 @@ function pieChartInit(projectScore){
         });
     }
 }
+function countiresPieChartInit(scores){
+    if (typeof c3 == 'undefined') {
+        console.warn('Warning - c3.min.js is not loaded.');
+        return;
+    }
+
+    Object.values(scores).forEach(val => {
+        console.log(val);
+        var idRecommendationBreakdown = "recommendationBreakdown-"+val.countryName.replace(' ','');
+        var idRiskLevelBreakdown = "riskLevelBreakdown-"+val.countryName.replace(' ','');
+
+        const recommendationBreakdown = document.getElementById(idRecommendationBreakdown);
+        const riskLevelBreakdown = document.getElementById(idRiskLevelBreakdown);
+
+        if(recommendationBreakdown) {
+
+            // Generate chart
+            const pie_chart = c3.generate({
+                bindto: recommendationBreakdown,
+                size: { width: 250 },
+                color: {
+                    pattern: ['#56a34c','#ee9328','#e15a57',]
+                },
+                data: {
+                    columns: [
+                        ['Allow', val.scoresNoType.allow],
+                        ['Flag', val.scoresNoType.flag],
+                        ['Block', val.scoresNoType.block],
+                    ],
+                    type : 'pie'
+                }
+            });
+        }
+
+        if(riskLevelBreakdown) {
+
+            // Generate chart
+            const pie_chart = c3.generate({
+                bindto: riskLevelBreakdown,
+                size: { width: 250 },
+                color: {
+                    pattern: ['#56a34c','#88d680','#f6cb75','#ee9328',
+                        '#d87a80','#e15a57',]
+                },
+                data: {
+                    columns: [
+                        ['Very low', val.scoresBreakdown.veryLow],
+                        ['Low', val.scoresBreakdown.low],
+                        ['Medium low', val.scoresBreakdown.mediumLow],
+                        ['Medium', val.scoresBreakdown.medium],
+                        ['High', val.scoresBreakdown.high],
+                        ['Very high', val.scoresBreakdown.veryHigh],
+                    ],
+                    type : 'pie'
+                }
+            });
+        }
+
+
+    });
+}
 
 function stackedBarInit(projectScore){
     if (typeof echarts == 'undefined') {

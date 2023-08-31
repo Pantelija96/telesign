@@ -208,8 +208,31 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-4 col-md-8">
-                    <div class="card" style="min-height: 700px;">
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Recommendation breakdown</h5>
+                        </div>
+                        <div class="card-body text-center chart-container">
+                            <div class="d-inline-block" id="recommendationBreakdown"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Risk level breakdown</h5>
+                        </div>
+                        <div class="card-body text-center chart-container">
+                            <div class="d-inline-block" id="riskLevelBreakdown"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-12">
+                    <div class="card" style="min-height: 1000px;">
                         <div class="card-header">
                             <h5 class="mb-0">Countries</h5>
                         </div>
@@ -228,8 +251,33 @@
                                         </div>
 
                                         <div id="country-{{str_replace(' ', '',$country['countryName'])}}" class="collapse show countries">
-                                            <div class="card-body chart-container">
-                                                <div class="chart has-fixed-height" id="{{$country['countryName']}}Chart"></div>
+                                            <div class="card-body p-2">
+                                                <div class="chart-container">
+                                                    <div class="chart has-fixed-height" id="{{$country['countryName']}}Chart"></div>
+                                                </div>
+                                                <div class="row mt-4">
+                                                    <div class="col-lg-6">
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                <h5 class="mb-0">Recommendation breakdown : {{$country['countryName']}}</h5>
+                                                            </div>
+                                                            <div class="card-body text-center chart-container">
+                                                                <div class="d-inline-block" id="recommendationBreakdown-{{str_replace(' ', '',$country['countryName'])}}"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-6">
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                <h5 class="mb-0">Risk level breakdown : {{$country['countryName']}}</h5>
+                                                            </div>
+                                                            <div class="card-body text-center chart-container">
+                                                                <div class="d-inline-block" id="riskLevelBreakdown-{{str_replace(' ', '',$country['countryName'])}}"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -237,28 +285,6 @@
                                 @endforeach
                             </div>
 
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Recommendation breakdown</h5>
-                        </div>
-                        <div class="card-body text-center chart-container">
-                            <div class="d-inline-block" id="recommendationBreakdown"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Risk level breakdown</h5>
-                        </div>
-                        <div class="card-body text-center chart-container">
-                            <div class="d-inline-block" id="riskLevelBreakdown"></div>
                         </div>
                     </div>
                 </div>
@@ -378,9 +404,13 @@
             var projectScore =  JSON.parse(`<?php Print($project); ?>`);
             var numbersScore = JSON.parse(`<?php Print($numbers); ?>`);
 
+            // console.log("projectScore",projectScore);
+            // console.log("numbersScore",numbersScore);
+
             mapInit(projectScore.projectScore);
             pieChartInit(projectScore.projectScore);
             stackedBarInit(projectScore.projectScore);
+            countiresPieChartInit(projectScore.projectScore.countryAndPhoneType);
 
             $("#countriesData").height($("#countriesMap").height());
         </script>

@@ -141,21 +141,6 @@ class BackendController extends Controller
         $dataArray = [];
 
         if($ext == "xlsx" || $ext == "xls"){
-            // $array = Excel::toArray(new NumberImport, public_path('csvUploads/'.$fileName));
-            // foreach($array[0] as $row){
-            //     $number = $row[0];
-            //     if($number == null){
-            //         continue;
-            //     }
-            //     $obj = [
-            //         'number' => $number,
-            //         'email' => "",
-            //         'ip' => "",
-            //         'scores' => [],
-            //         'projectId' => $request->get('projectId')
-            //     ];
-            //     $dataArray[] = $obj;
-            // }
             $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
             $reader->setReadDataOnly(true);
             $spreadsheet = $reader->load(public_path('csvUploads/'.$fileName));
@@ -589,29 +574,6 @@ class BackendController extends Controller
 
             //return dd($apiResult->risk->level);
 
-            switch ($apiResult->risk->level){
-                case "very_low":
-                    $projectScore['riskLevelBreakdown']['veryLow']++;
-                    break;
-                case "low":
-                    $projectScore['riskLevelBreakdown']['low']++;
-                    break;
-                case "medium_low":
-                    $projectScore['riskLevelBreakdown']['mediumLow']++;
-                    break;
-                case "medium":
-                    $projectScore['riskLevelBreakdown']['medium']++;
-                    break;
-                case "high":
-                    $projectScore['riskLevelBreakdown']['high']++;
-                    break;
-                case "very-high":
-                    $projectScore['riskLevelBreakdown']['veryHigh']++;
-                    break;
-                default:
-                    break;
-            }
-
             $countryIso = $apiResult->location->country->iso2 ? $apiResult->location->country->iso2 : "No country Iso";
             $typeOfNumber = $apiResult->phone_type->description ? $apiResult->phone_type->description : "No number type";
 
@@ -621,6 +583,8 @@ class BackendController extends Controller
                     'countryName' => $apiResult->location->country->name ? $apiResult->location->country->name : "No country name",
                     'numberOfNumbers' => 0,
                     'scores' => [],
+                    'scoresBreakdown' => [],
+                    'scoresNoType' => [],
                     'numbers' => []
                 ];
                 $countryAndPhoneType[$countryIso] = $newCountryObj;
@@ -636,19 +600,64 @@ class BackendController extends Controller
                     'block' => 0
                 ];
                 $countryAndPhoneType[$countryIso]['scores'][$typeOfNumber] = $newTypeOfNumberObj;
+                $countryAndPhoneType[$countryIso]['scoresBreakdown'] = [
+                    'veryLow' => 0,
+                    'low' => 0,
+                    'mediumLow' => 0,
+                    'medium' => 0,
+                    'high' => 0,
+                    'veryHigh' => 0,
+                ];
+                $countryAndPhoneType[$countryIso]['scoresNoType'] = [
+                    'allow' => 0,
+                    'flag' => 0,
+                    'block' => 0
+                ];
             }
             switch ($apiResult->risk->recommendation) {
                 case "allow":
                     $projectScore['recommendationBreakdown']['allow']++;
                     $countryAndPhoneType[$countryIso]['scores'][$typeOfNumber]['allow']++;
+                    $countryAndPhoneType[$countryIso]['scoresNoType']['allow']++;
                     break;
                 case "flag":
                     $projectScore['recommendationBreakdown']['flag']++;
                     $countryAndPhoneType[$countryIso]['scores'][$typeOfNumber]['flag']++;
+                    $countryAndPhoneType[$countryIso]['scoresNoType']['flag']++;
                     break;
                 case "block":
                     $projectScore['recommendationBreakdown']['block']++;
                     $countryAndPhoneType[$countryIso]['scores'][$typeOfNumber]['block']++;
+                    $countryAndPhoneType[$countryIso]['scoresNoType']['block']++;
+                    break;
+                default:
+                    break;
+            }
+
+            switch ($apiResult->risk->level){
+                case "very_low":
+                    $projectScore['riskLevelBreakdown']['veryLow']++;
+                    $countryAndPhoneType[$countryIso]['scoresBreakdown']['veryLow']++;
+                    break;
+                case "low":
+                    $projectScore['riskLevelBreakdown']['low']++;
+                    $countryAndPhoneType[$countryIso]['scoresBreakdown']['low']++;
+                    break;
+                case "medium_low":
+                    $projectScore['riskLevelBreakdown']['mediumLow']++;
+                    $countryAndPhoneType[$countryIso]['scoresBreakdown']['mediumLow']++;
+                    break;
+                case "medium":
+                    $projectScore['riskLevelBreakdown']['medium']++;
+                    $countryAndPhoneType[$countryIso]['scoresBreakdown']['medium']++;
+                    break;
+                case "high":
+                    $projectScore['riskLevelBreakdown']['high']++;
+                    $countryAndPhoneType[$countryIso]['scoresBreakdown']['high']++;
+                    break;
+                case "very-high":
+                    $projectScore['riskLevelBreakdown']['veryHigh']++;
+                    $countryAndPhoneType[$countryIso]['scoresBreakdown']['veryHigh']++;
                     break;
                 default:
                     break;
