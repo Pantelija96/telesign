@@ -19,6 +19,7 @@ var highRate = 0;
 var veryHighRate = 0;
 
 var totalFraudNumbers = 0;
+var fraudNumberManualy = 0;
 
 var numberOfNumbers = 0; //parseInt($("#numberOfNumbers").val());
 var initialNumberOfNumbers = 0;
@@ -126,16 +127,19 @@ function calculate(){
     $("#highPositiveRateNumbers").val(highRate);
     $("#veryHighPositiveRateNumbers").val(veryHighRate);
     $("#totalFraudNumbers").val(totalFraudNumbers);
-    if(!finishedLoading){
+    if(fraudNumberManualy == 0){
         $("#transactionAvoided").val(totalFraudNumbers);
     }
-    
+    else{
+        $("#transactionAvoided").val(fraudNumberManualy);
+    }
+
     //fraud avoided by
     var fraudNumbersForm = parseInt($("#transactionAvoided").val());
     averageValOfTransaction = parseFloat($("#averageValOfTransaction").val()).toFixed(2);
     fraudAvoidedBy = fraudNumbersForm * averageValOfTransaction;
     $("#fraudAvoidedBy").val(fraudAvoidedBy);
-
+    
     //total cost
     monthlyCost = parseFloat($("#monthlyCost").val());
     otherCostsAllNumbers = parseFloat($("#otherCostsAllNumbers").val());
@@ -156,6 +160,11 @@ function calculate(){
     roi = parseFloat(totalSavings) + parseFloat(fraudAvoidedBy) - parseFloat(totalCost);
     drawLines();
     $("#roi").val(roi.toFixed(2));
+}
+function transactionAvoidedChanged(){
+    //fraud avoided by
+    fraudNumberManualy = parseInt($("#transactionAvoided").val());
+    calculate();
 }
 function dateRange(startDate, endDate, steps = 1) {
   const dateArray = [];

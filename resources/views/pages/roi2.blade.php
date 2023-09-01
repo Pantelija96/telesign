@@ -217,7 +217,7 @@
                     <div class="row mb-3">
                         <label class="col-lg-6 col-form-label" for="transactionAvoided">Amount of fraudulent transaction avoided:</label>
                         <div class="col-lg-6">
-                            <input type="number" placeholder="0" step="1" id="transactionAvoided" onchange="calculate()" name="transactionAvoided" class="form-control">
+                            <input type="number" placeholder="0" step="1" id="transactionAvoided" onchange="transactionAvoidedChanged()" name="transactionAvoided" class="form-control">
                         </div>
                     </div>
 
