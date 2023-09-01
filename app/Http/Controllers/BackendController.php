@@ -686,10 +686,11 @@ class BackendController extends Controller
 
 
 
-    public function deleteProjects(){
-        Project::query()->delete();
-        return redirect('/home2');
-    }
+    // public function deleteProjects(){
+    //     Project::query()->delete();
+    //     Number::query()->delete();
+    //     return redirect('/home2');
+    // }
 
 
 

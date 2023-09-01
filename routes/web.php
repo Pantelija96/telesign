@@ -17,7 +17,7 @@ Route::get('/getScoreForNumber', [BackendController::class, 'getScoreForNumber']
 Route::get('/getCodes', [BackendController::class, 'getCodes'])->middleware('basicAuth');
 Route::post('/saveProject', [BackendController::class, 'saveProject'])->name('saveProject')->middleware('basicAuth');
 
-Route::get('/deleteProjects', [BackendController::class, 'deleteProjects']);
+// Route::get('/deleteProjects', [BackendController::class, 'deleteProjects']);
 
 
 
