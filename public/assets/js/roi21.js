@@ -97,6 +97,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     calculate();
     finishedLoading = true;
+
+    //saving data on change
+    // $("#highPositiveRate").blur(function(){
+    //     alert("The text has been changed.");
+    // });
 });
 
 
@@ -121,6 +126,8 @@ function calculate(){
     //calculate frauds
     highPositiveRate = parseInt($("#highPositiveRate").val());
     veryHighPositiveRate = parseInt($("#veryHighPositiveRate").val());
+    $("#highPositiveRateHidden").val(highPositiveRate);
+    $("#veryHighPositiveRateHidden").val(veryHighPositiveRate);
     highRate = Math.round(high * (highPositiveRate/100));
     veryHighRate = Math.round(veryHigh * (veryHighPositiveRate/100));
     totalFraudNumbers = highRate + veryHighRate;

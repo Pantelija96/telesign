@@ -33,6 +33,7 @@ class FrontendController extends Controller
 
         $projects = Project::where('owner', '=', $userId)
             ->orWhere('saved', '=', true)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         if($view == 0) {
@@ -123,7 +124,7 @@ class FrontendController extends Controller
         $veryHigh = $project['projectScore']['riskLevelBreakdown']['veryHigh'];
         $this->data['numberOfNumbers'] = $veryLow + $low + $mediumLow + $medium + $high + $veryHigh;
         $this->data['scamNumbers'] = $high + $veryHigh;
-            //    return dd($this->data);
+        // return dd($this->data);
         return view('pages.roi2', $this->data);
     }
 

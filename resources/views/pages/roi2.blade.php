@@ -103,7 +103,7 @@
                             {{round(floatval(($project['projectScore']['riskLevelBreakdown']['high']/$numberOfNumbers)*100),2)}}
                         </td>
                         <td>
-                            <input type="number" class="form-control" id="highPositiveRate" name="highPositiveRate" onchange="calculate()" value="50" max="100" min="0" step="1" style="text-align:center;">
+                            <input type="number" class="form-control" id="highPositiveRate" name="highPositiveRate" onchange="calculate()" @if(!empty($project['highPositiveRateHidden'])) value="{{$project['highPositiveRateHidden']}}"  @else value="50" @endif max="100" min="0" step="1" style="text-align:center;">
                         </td>
                         <td>
                             <input type="number" class="form-control" id="highPositiveRateNumbers" name="highPositiveRateNumbers" style="text-align:center;" readonly>
@@ -119,7 +119,7 @@
                             {{round(floatval(($project['projectScore']['riskLevelBreakdown']['veryHigh']/$numberOfNumbers)*100),2)}}
                         </td>
                         <td>
-                            <input type="number" class="form-control" id="veryHighPositiveRate" name="veryHighPositiveRate" onchange="calculate()" value="90" max="100" min="0" step="1" style="text-align:center;">
+                            <input type="number" class="form-control" id="veryHighPositiveRate" name="veryHighPositiveRate" onchange="calculate()" @if(!empty($project['veryHighPositiveRate'])) value="{{$project['veryHighPositiveRate']}}"  @else value="90" @endif max="100" min="0" step="1" style="text-align:center;">
                         </td>
                         <td>
                             <input type="number" class="form-control" id="veryHighPositiveRateNumbers" name="veryHighPositiveRateNumbers" readonly style="text-align:center;">
@@ -148,8 +148,8 @@
                 @if($owner)
                 {{csrf_field()}}
                 <input type="hidden" name="projectId" id="projectId" value="{{$id}}">
-                <!-- <input type="hidden" name="numberOfNumbers" id="numberOfNumbers" value="{{$numberOfNumbers}}">
-                <input type="hidden" name="scamNumbers" id="scamNumbers" value="{{$scamNumbers}}"> -->
+                <input type="hidden" name="highPositiveRateHidden" id="highPositiveRateHidden" value="50">
+                <input type="hidden" name="veryHighPositiveRateHidden" id="veryHighPositiveRateHidden" value="90">
                 @endif
                 <fieldset>
                     <legend class="fs-base fw-bold border-bottom pb-2 mb-3">Solution details</legend>

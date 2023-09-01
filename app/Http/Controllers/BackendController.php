@@ -442,11 +442,14 @@ class BackendController extends Controller
     }
 
     public function saveProject(Request $request){
+        // return dd($request->all());
 
         $projectId = $request->get('projectId');
         $project = Project::where('_id', '=', $projectId)
             ->update([
                 'saved' => true,
+                'veryHighPositiveRate' => $request->get('veryHighPositiveRateHidden'),
+                'highPositiveRateHidden' => $request->get('highPositiveRateHidden'),
                 'name' => $request->get('customerName') == "" ? "Generic customer name" : $request->get('customerName'),
                 'description' => $request->get('solutionName') == "" ? "Generic solution name" : $request->get('solutionName'),
                 'jobDate' => $request->get('jobDate'),
@@ -455,10 +458,11 @@ class BackendController extends Controller
                 'periodTo' => $request->get('periodTo'),
                 'roi' => $request->get('roi'),
                 'transactionAvoided' => $request->get('transactionAvoided'),
-                'averageValOfTrans' => $request->get('averageValOfTrans'),
+                'averageValOfTransaction' => $request->get('averageValOfTransaction'),
                 'fraudAvoidedBy' => $request->get('fraudAvoidedBy'),
                 'monthlyCost' => $request->get('monthlyCost'),
-                'otherCosts' => $request->get('otherCosts'),
+                'otherCostsAllNumbers' => $request->get('otherCostsAllNumbers'),
+                'otherCostsFraudNumbers' => $request->get('otherCostsFraudNumbers'),
                 'totalCost' => $request->get('totalCost'),
                 'costPerPhone' => $request->get('costPerPhone'),
                 'totalPerPhone' => $request->get('totalPerPhone'),
