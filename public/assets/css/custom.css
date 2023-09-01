@@ -155,3 +155,10 @@
 .closer-to-sign{
     padding-left: 30px !important;
 }
+
+.roiNumberInput{
+    text-align: center;
+    outline: none;
+    background: none;
+    border: none;
+}

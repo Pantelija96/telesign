@@ -1,32 +1,47 @@
-var line_zoom = null;
-var line_zoom_element = null;
-var finishedLoading = false;
-var totalCost = 0;
-var roi = 0;
+//vars for page
+var veryLow = 0;
+var low = 0;
+var mediumLow = 0;
+var medium = 0;
+var high = 0;
+var veryHigh = 0;
 
+var veryLowInitial = 0;
+var lowInitial = 0;
+var mediumLowInitial = 0;
+var mediumInitial = 0;
+var highInitial = 0;
+var veryHighInitial = 0;
 
-
-var periodMultiplier = 1;
-var totalNumbers = 0;
+var highPositiveRate = 0;
+var veryHighPositiveRate = 0;
 var highRate = 0;
 var veryHighRate = 0;
-var scamNumbers = 0;
+
+var totalFraudNumbers = 0;
+
+var numberOfNumbers = 0; //parseInt($("#numberOfNumbers").val());
+var initialNumberOfNumbers = 0;
+var periodMultiplier = 1;
+
+var averageValOfTransaction = 0;
 var fraudAvoidedBy = 0;
-var numberOfNumbers = 0;
+
 var monthlyCost = 0;
 var otherCostsAllNumbers = 0;
 var otherCostsFraudNumbers = 0;
+var totalCost = 0;
 
+var costPerPhone = 0;
+var averageSMS = 0;
+var otherSavings = 0;
+var totalSavings = 0;
 
+var roi = 0;
+
+//on page load
+var finishedLoading = false;
 document.addEventListener('DOMContentLoaded', function() {
-    calculateFraudNumbers();
-    calculateFraudAvoidedBy();
-    calculateTotalCost();
-    calculateTotalSMS();
-    calculatePerPhone();
-    calculateTotalSavings();
-    calculateROI();
-
     if (typeof Datepicker == 'undefined') {
         console.warn('Warning - datepicker.min.js is not loaded.');
         return;
@@ -77,121 +92,71 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 200);
     });
 
+    initialNumberOfNumbers = parseInt($("#initialNumberOfNumbers").val());
 
+    calculate();
     finishedLoading = true;
 });
-function calculateFraudNumbers(){
+
+
+function calculate(){
+    //calculate table
     periodMultiplier = parseInt($("#periodMultiplier").val());
+    veryLow = parseInt($("#veryLow").data("initial")) * periodMultiplier;
+    low = parseInt($("#low").data("initial")) * periodMultiplier;
+    mediumLow = parseInt($("#mediumLow").data("initial")) * periodMultiplier;
+    medium = parseInt($("#medium").data("initial")) * periodMultiplier;
+    high = parseInt($("#high").data("initial")) * periodMultiplier;
+    veryHigh = parseFloat($("#veryHigh").data("initial")) * periodMultiplier;
+    numberOfNumbers = veryLow + low + mediumLow + medium + high + veryHigh;
+    $("#veryLow").val(veryLow);
+    $("#low").val(low);
+    $("#mediumLow").val(mediumLow);
+    $("#medium").val(medium);
+    $("#high").val(high);
+    $("#veryHigh").val(veryHigh);
+    $("#numberOfNumbers").val(numberOfNumbers);
 
-    var veryLowNumbers = parseInt($("#veryLowNumbers").val()) * periodMultiplier;
-    var lowNumbers = parseInt($("#lowNumbers").val()) * periodMultiplier;
-    var mediumLow = parseInt($("#mediumLowNumbers").val()) * periodMultiplier;
-    var mediumNumbers = parseInt($("#mediumNumbers").val()) * periodMultiplier;
-    var highNumbers = parseInt($("#highNumbers").val()) * periodMultiplier;
-    var veryHighNumbers = parseFloat($("#veryHighNumbers").val()) * periodMultiplier;
-    totalNumbers = veryLowNumbers + lowNumbers + mediumLow + mediumNumbers + highNumbers + veryHighNumbers;
-
-    var highNumbersPositiveRate = parseInt($("#highPositiveRate").val());
-    var veryHighNumbersPositiveRate = parseInt($("#veryHighPositiveRate").val());
-    highRate = Math.round(highNumbers * (highNumbersPositiveRate/100));
-    veryHighRate = Math.round(veryHighNumbers * (veryHighNumbersPositiveRate/100));
-
-    $("#very-low").html(veryLowNumbers);
-    $("#low").html(lowNumbers);
-    $("#medium-low").html(mediumLow);
-    $("#medium").html(mediumNumbers);
-    $("#high").html(highNumbers);
-    $("#very-high").html(veryHighNumbers);
-    $("#totalNumbers").html(totalNumbers);
-
+    //calculate frauds
+    highPositiveRate = parseInt($("#highPositiveRate").val());
+    veryHighPositiveRate = parseInt($("#veryHighPositiveRate").val());
+    highRate = Math.round(high * (highPositiveRate/100));
+    veryHighRate = Math.round(veryHigh * (veryHighPositiveRate/100));
+    totalFraudNumbers = highRate + veryHighRate;
     $("#highPositiveRateNumbers").val(highRate);
     $("#veryHighPositiveRateNumbers").val(veryHighRate);
-    $("#totalFraudNumbers").html(highRate+veryHighRate);
-    $("#totalFraudNumbersHidden").val(highRate+veryHighRate);
-    $("#transactionAvoided").val(highRate+veryHighRate);
-    $("#totalNumbersHidden").val(totalNumbers);
-    if(finishedLoading){
-        calculateFraudAvoidedBy();
-        calculateTotalCost();
+    $("#totalFraudNumbers").val(totalFraudNumbers);
+    if(!finishedLoading){
+        $("#transactionAvoided").val(totalFraudNumbers);
     }
-}
-function calculateFraudAvoidedBy() {
-    scamNumbers = parseInt($("#transactionAvoided").val());
-    var averageValue = parseFloat($("#averageValOfTrans").val());
-
-    fraudAvoidedBy = scamNumbers * averageValue;
+    
+    //fraud avoided by
+    var fraudNumbersForm = parseInt($("#transactionAvoided").val());
+    averageValOfTransaction = parseFloat($("#averageValOfTransaction").val()).toFixed(2);
+    fraudAvoidedBy = fraudNumbersForm * averageValOfTransaction;
     $("#fraudAvoidedBy").val(fraudAvoidedBy);
 
-    if(finishedLoading){
-        calculateTotalSMS();
-        calculateROI();
-    }
-}
-function calculateTotalCost(){
-    numberOfNumbers = parseInt($("#totalNumbersHidden").val());
+    //total cost
     monthlyCost = parseFloat($("#monthlyCost").val());
     otherCostsAllNumbers = parseFloat($("#otherCostsAllNumbers").val());
     otherCostsFraudNumbers = parseFloat($("#otherCostsFraudNumbers").val());
-
-    // var highPositiveRateNumbers = parseInt($("#highPositiveRateNumbers").val());
-    // var veryHighPositiveRateNumbers = parseInt($("#veryHighPositiveRateNumbers").val());
-    var fraudNumbers = highRate + veryHighRate;
-
-    totalCost = monthlyCost + otherCostsAllNumbers*numberOfNumbers + fraudNumbers*otherCostsFraudNumbers;
-
+    totalCost = monthlyCost + otherCostsAllNumbers * numberOfNumbers + otherCostsFraudNumbers * totalFraudNumbers;
     $("#totalCost").val(totalCost);
 
-    if(finishedLoading){
-        calculateROI();
-    }
-}
-function calculateTotalSMS(){
-    // var highPositiveRateNumbers = parseInt($("#highPositiveRateNumbers").val());
-    // var veryHighPositiveRateNumbers = parseInt($("#veryHighPositiveRateNumbers").val());
-    var fraudNumbers = highRate + veryHighRate;
-    var averageSMS = parseFloat($("#averageSMS").val());
-
-    var totalSMS = averageSMS * fraudNumbers;
-    $("#totalSMS").val(totalSMS);
-    calculateTotalSavings();
-}
-function calculatePerPhone(){
-    // var numberOfNumbers = parseInt($("#totalNumbersHidden").val());
-    var costPerPhone = parseFloat($("#costPerPhone").val());
-
-    var totalPerPhone = costPerPhone * numberOfNumbers;
-    $("#totalPerPhone").val(totalPerPhone);
-    calculateTotalSavings();
-}
-function calculateTotalSavings(){
-    var savingsPhone = parseFloat($("#totalPerPhone").val());
-    var savingsSms = parseFloat($("#totalSMS").val());
-    var otherSavings = parseFloat($("#otherSavings").val());
-
-    var totalSavings = savingsPhone + savingsSms + otherSavings;
+    //total savings
+    costPerPhone = parseFloat($("#costPerPhone").val());
+    averageSMS = parseFloat($("#averageSMS").val());
+    otherSavings = parseFloat($("#otherSavings").val());
+    $("#totalPerPhone").val(parseFloat(costPerPhone * numberOfNumbers).toFixed(4));
+    $("#totalSMS").val(parseFloat(averageSMS * totalFraudNumbers).toFixed(4));
+    totalSavings = parseFloat(otherSavings + averageSMS * totalFraudNumbers + costPerPhone * numberOfNumbers).toFixed(4);
     $("#totalSavings").val(totalSavings);
-    if(finishedLoading){
-        calculateROI();
-    }
-}
-function calculateROI(){
-    //fraudAvoidedBy
-    //totalCost
-    var fraudAvoidedBy = parseFloat($("#fraudAvoidedBy").val());
-    var totalSavings = parseFloat($("#totalSavings").val());
-    var totalCost = parseFloat($("#totalCost").val());
 
-    roi = fraudAvoidedBy - totalCost + totalSavings;
-    // console.log("fraudAvoidedBy", fraudAvoidedBy);
-    // console.log("totalCost", totalCost);
-    // console.log("totalSavings", totalSavings);
-    // console.log("roi", roi);
+    //roi
+    roi = parseFloat(totalSavings) + parseFloat(fraudAvoidedBy) - parseFloat(totalCost);
     drawLines();
-    $("#roi").val(roi);
+    $("#roi").val(roi.toFixed(2));
 }
-
-
-
 function dateRange(startDate, endDate, steps = 1) {
   const dateArray = [];
   let currentDate = new Date(startDate);
@@ -205,7 +170,7 @@ function dateRange(startDate, endDate, steps = 1) {
   return dateArray;
 }
 function drawLines(){
-    console.log('draw lines');
+    // console.log('draw');
     line_zoom_element = document.getElementById('line_zoom');
 
     var dataForXaxis = [];
@@ -226,29 +191,26 @@ function drawLines(){
 
     var tmpSavings = 0;
     var tmpCost = totalCost;
+    var monthCount = 1;
 
     const dates = dateRange(dateFrom, dateTo);
-    dates.forEach(function(value){
+    dates.forEach(function(value, index){
         var newXaxis = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
         dataForXaxis.push(newXaxis);
-        dataSerisSavings.push(tmpSavings);
+        dataSerisSavings.push(parseFloat(tmpSavings).toFixed(2));
         tmpSavings += incrementValue;
-        if(value.getDate() === 1){
-            tmpCost += tmpCost;
+        if(value.getDate() === 1 && index !== 0){
+            monthCount++;
+            tmpCost = totalCost * monthCount;
         }
         dataSerisCost.push(tmpCost);
     })
 
-    console.log(dataSerisSavings);
-
+    // console.log(dataSerisSavings);
     // console.log("dateFrom",dateFrom);
     // console.log("dateTo",dateTo);
     // console.log("numberOfDays",numberOfDays);
     // console.log("dataForXaxis",dataForXaxis);
-
-    // return;
-
-
 
     if (line_zoom_element) {
         line_zoom = echarts.init(line_zoom_element, null, { renderer: 'svg' });
