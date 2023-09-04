@@ -237,6 +237,15 @@ class BackendController extends Controller
         //score numbers for this project
         $id = $request->get('projectId');
         $project =  Project::where('_id', '=', $id)->first();
+        $test = [
+                'veryLow' => 0,
+                'low' => 0,
+                'mediumLow' => 0,
+                'medium' => 0,
+                'high' => 0,
+                'veryHigh' => 0,
+                'test' => 0
+            ];
 
         //for project inesrt project score in document
         $projectScore = [
@@ -299,23 +308,30 @@ class BackendController extends Controller
             switch ($apiResult->risk->level){
                 case "very_low":
                     $projectScore['riskLevelBreakdown']['veryLow']++;
+                    $test['veryLow']++;
                     break;
                 case "low":
                     $projectScore['riskLevelBreakdown']['low']++;
+                    $test['low']++;
                     break;
                 case "medium_low":
                     $projectScore['riskLevelBreakdown']['mediumLow']++;
+                    $test['mediumLow']++;
                     break;
                 case "medium":
                     $projectScore['riskLevelBreakdown']['medium']++;
+                    $test['medium']++;
                     break;
                 case "high":
                     $projectScore['riskLevelBreakdown']['high']++;
+                    $test['high']++;
                     break;
                 case "very_high":
                     $projectScore['riskLevelBreakdown']['veryHigh']++;
+                    $test['veryHigh']++;
                     break;
                 default:
+                    $test['test']++;
                     break;
             }
 
@@ -362,16 +378,18 @@ class BackendController extends Controller
                     break;
             }
 
-            Project::where('_id','=',$id)
-                ->where('numbers._id','=',$numberId)
-                ->update([
-                    'numbers.$[].scores' => $numberScore
-                ]);
+            // Project::where('_id','=',$id)
+            //     ->where('numbers._id','=',$numberId)
+            //     ->update([
+            //         'numbers.$[].scores' => $numberScore
+            //     ]);
         }
 
         $projectScore['countryAndPhoneType'] = $countryAndPhoneType;
 
         curl_close($curl);
+
+        return dd($test);
 
         $updateProjectScore = Project::where('_id', '=', $id)->update($projectScore);
         return dd($updateProjectScore);
@@ -519,8 +537,6 @@ class BackendController extends Controller
 
         $curl = curl_init();
 
-        $test = [];
-
         foreach ($numbers as $row){
             $numberId = $row['_id'];
             $number = $row['number'];
@@ -643,11 +659,19 @@ class BackendController extends Controller
                     $projectScore['riskLevelBreakdown']['veryLow']++;
                     $countryAndPhoneType[$countryIso]['scoresBreakdown']['veryLow']++;
                     break;
+                case "very-low":
+                    $projectScore['riskLevelBreakdown']['veryLow']++;
+                    $countryAndPhoneType[$countryIso]['scoresBreakdown']['veryLow']++;
+                    break;
                 case "low":
                     $projectScore['riskLevelBreakdown']['low']++;
                     $countryAndPhoneType[$countryIso]['scoresBreakdown']['low']++;
                     break;
                 case "medium_low":
+                    $projectScore['riskLevelBreakdown']['mediumLow']++;
+                    $countryAndPhoneType[$countryIso]['scoresBreakdown']['mediumLow']++;
+                    break;
+                case "medium-low":
                     $projectScore['riskLevelBreakdown']['mediumLow']++;
                     $countryAndPhoneType[$countryIso]['scoresBreakdown']['mediumLow']++;
                     break;
@@ -663,6 +687,10 @@ class BackendController extends Controller
                     $projectScore['riskLevelBreakdown']['veryHigh']++;
                     $countryAndPhoneType[$countryIso]['scoresBreakdown']['veryHigh']++;
                     break;
+                case "very_high":
+                    $projectScore['riskLevelBreakdown']['veryHigh']++;
+                    $countryAndPhoneType[$countryIso]['scoresBreakdown']['veryHigh']++;
+                    break;
                 default:
                     break;
             }
@@ -670,8 +698,6 @@ class BackendController extends Controller
         curl_close($curl);
 
         $projectScore['countryAndPhoneType'] = $countryAndPhoneType;
-
-        //return dd($projectScore);
 
         $project->update([
             'projectScore' => $projectScore

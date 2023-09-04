@@ -747,8 +747,16 @@ function mapInit(projectScore){
         });
 
         map_world_scatter.on('click', function(params) {
+            console.log(params);
             if(params.data){
                 var name = params.data.name.replace(' ', '')
+                $(".countries").removeClass('show');
+                $(".countriesLink").addClass('collapsed');
+                $("#country-"+name).addClass('show');
+                $('a[href="#country-'+name+'"]').removeClass('collapsed');
+            }
+            else{
+                var name = params.name.replace(' ', '')
                 $(".countries").removeClass('show');
                 $(".countriesLink").addClass('collapsed');
                 $("#country-"+name).addClass('show');
