@@ -1089,6 +1089,12 @@ function showOneNumberScores(numberId){
             numberId: numberId,
         },
         success:function(data) {
+            removeOldClasses(document.getElementById('riskLevelTitle'));
+            removeOldClasses(document.getElementById('recommendationTitle'));
+            // $("#riskLevelTitle").className = '';
+            // $("#recommendationTitle").className = '';
+
+
             $("#oneNumberNumber").text(data[0][0].number);
             $("#oneNumberRiskLevel").text(data[0][0].scores.riskLevel);
             $("#oneNumberRecommendation").text(data[0][0].scores.recommendation);
@@ -1163,4 +1169,12 @@ function showReadMore(text){
 
 function showAllNumberScores(){
     showHideScoreNav('all')
+}
+
+function removeOldClasses(el) {
+    var startsWith = "bg-";
+    var classes = el.className.split(" ").filter(function(v) {
+        return v.lastIndexOf(startsWith, 0) !== 0;
+    });
+    el.className = classes.join(" ").trim();
 }
