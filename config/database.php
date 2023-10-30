@@ -91,10 +91,22 @@ return [
             'prefix_indexes' => true,
         ],
 
+//        'mongodb' => [
+//            'driver' => 'mongodb',
+////            'dsn' => env('DB_URI', 'mongodb+srv://telesign-s2d2:ik2BCjb9IiS7PlM2@s2d2cluster.0izkhhs.mongodb.net/myappdb?retryWrites=true&w=majority'),
+////            'database' => 'telesign_test',
+//            'host'     => env('MONGODB_CONNECTION_STRING', 'mongodb://localhost:27017'),
+//            'port'     => env('MONGODB_PORT', 27017),
+//            'database' => env('MONGODB_DATABASE', 'telesign'),
+//        ],
+
         'mongodb' => [
-            'driver' => 'mongodb',
-            'dsn' => env('DB_URI', 'mongodb+srv://telesign-s2d2:ik2BCjb9IiS7PlM2@s2d2cluster.0izkhhs.mongodb.net/myappdb?retryWrites=true&w=majority'),
-            'database' => 'telesign_test',
+            'driver'   => 'mongodb',
+            'host'     => env('DB_HOST', 'localhost'),
+            'port'     => env('DB_PORT', 27017),
+            'database' => env('DB_DATABASE'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
         ],
 
     ],

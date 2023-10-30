@@ -44,7 +44,7 @@ class BackendController extends Controller
 
         $user = User::where([
             'username' => $request->get('username'),
-            'password' => $request->get('password')
+            'password' => md5($request->get('password'))
         ])->first();
 
 
@@ -137,7 +137,7 @@ class BackendController extends Controller
         $csvFile = file(public_path('csvUploads/'.$fileName));
 
         $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-        
+
         $dataArray = [];
 
         if($ext == "xlsx" || $ext == "xls"){
@@ -200,11 +200,11 @@ class BackendController extends Controller
             'last_name' => $request->get('lastname'),
             'email' => $request->get('email'),
             'username' => $request->get('username'),
-            'password' => $request->get('oldPassword'),
+            'password' => md5($request->get('oldPassword')),
         ];
 
         if($request->get('password') == $request->get('passwordA') && $request->get('passwordA') != null){
-            $dataForUpdate["password"] =$request->get('passwordA');
+            $dataForUpdate["password"] = md5($request->get('passwordA'));
         }
 
         $response = User::where('_id','=',$request->session()->get('user')['_id'])
@@ -568,7 +568,7 @@ class BackendController extends Controller
 
             // if(!isset($apiResult->risk_insights)){
             //     var_dump($number); //12242635303
-            //     return dd($apiResult); 
+            //     return dd($apiResult);
             // }
 
             $numberScore = [
@@ -708,7 +708,15 @@ class BackendController extends Controller
 
 
 
+    public function testDb(){
+        $user = new User();
+        $user->username = 'panta';
+        $user->password = md5('panta');
+        $user->name = 'Pantelija';
+        $user->last_name = 'Stosic';
 
+        return dd($user->save());
+    }
 
 
 
