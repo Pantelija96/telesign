@@ -10,6 +10,7 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\FrontendController;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\LazyCollection;
@@ -22,11 +23,121 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class BackendController extends Controller
 {
+    private function logErrors($message){
+        $error_id = time();
+        Log::error($error_id." => ".$message);
+    }
+    private function logActions($message){
+        $log_id = time();
+        Log::alert($log_id." => ".$message);
+    }
+    private function getUserFromLdap($username, $password){
+//        'ldapServer' => (string) $xml->ldap->ldapServer,
+//        'ldapPort' => (string) $xml->ldap->ldapPort,
+//        'ldapBaseDn' => (string) $xml->ldap->ldapBaseDn,
+//        'ldapUsername' => (string) $xml->ldap->ldapUsername,
+//        'ldapPassword'=> (string) $xml->ldap->ldapPassword
+        $xmlPath = base_path('../config/ADConfig.xml');
+        $xml = simplexml_load_file($xmlPath);
+        $ldapConnection = false;
+        $data = [
+            'user' => null,
+            'message' => ''
+        ];
 
-    public function logout(Request $request){
-        $request->session()->invalidate();
-        $request->session()->flush();
-        return redirect('/');
+
+
+        try {
+            $ldapConnection = ldap_connect($xml->ldap->ldapServer);
+        }
+        catch (\Exception $e) {
+            $data['message'] = "Error while connecting to LDAP server -> ".$e->getMessage();
+        }
+
+        if ($ldapConnection) {
+            ldap_set_option($ldapConnection, LDAP_OPT_PROTOCOL_VERSION, 3);
+            ldap_set_option($ldapConnection, LDAP_OPT_REFERRALS, 0);
+            $bind = false;
+
+            try {
+                $bind = ldap_bind($ldapConnection, $xml->ldap->ldapUsername, $xml->ldap->ldapPassword);
+            }
+            catch (\Exception $e) {
+                $data['message'] = "Error while binding to LDAP server -> ".$e->getMessage();
+            }
+
+            if ($bind) {
+                //echo "LDAP bind successful
+                // Perform LDAP search for user with username
+                $searchBase = "dc=example,dc=com"; //Default search base
+                $searchFilter = "(uid=$username)"; // Search filter for username
+                $searchAttributes = ["dn", "cn", "sn", "mail"]; // Attributes to retrieve
+
+                $ldapSearch = ldap_search($ldapConnection, $searchBase, $searchFilter, $searchAttributes);
+                $ldapResult = ldap_get_entries($ldapConnection, $ldapSearch);
+
+                $userDn = $ldapResult[0]['dn'];
+
+                try {
+                    $userBind = ldap_bind($ldapConnection, $userDn, $password);
+                }
+                catch (\Exception $e) {
+                    $data['message'] = "Error while binding user to LDAP server, check your email/password -> ".$e->getMessage();
+                }
+
+                if($userBind){
+                    $groups = [];
+                    foreach ($xml->permissions->groupName as $groupName) {
+                        $groups[] = (string)$groupName;
+                    }
+                    $userInGroups = false;
+
+                    // Loop through each group to check membership
+                    foreach ($groups as $desiredGroup) {
+                        $groupSearchFilter = "(&(cn=$desiredGroup)(member=uid=$username,$searchBase))";
+                        $groupSearch = ldap_search($ldapConnection, $searchBase, $groupSearchFilter, ["cn"]);
+                        $groupEntries = ldap_get_entries($ldapConnection, $groupSearch);
+
+                        // Check if the user is a member of the current group
+                        if ($groupEntries['count'] > 0) {
+                            // User is a member of the current group
+                            $userInGroups = true;
+                            break; // Exit the loop since user is already found in a group
+                        }
+                    }
+
+                    if($userInGroups){
+                        $data['user'] = [
+                            "username" => $username,
+                            "email" => $ldapResult[0]['mail'][0],
+                            "fullName" => $ldapResult[0]['cn'][0],
+                            "lastName" => $ldapResult[0]['sn'][0]
+                        ];
+                    }
+                    else{
+                        $data['user'] = null;
+                        $data['message'] = "Error user is not in permitted groups!";
+                    }
+                }
+                else{
+                    $data['user'] = null;
+                    $data['message'] = "Error while binding user to LDAP server, check your email/password!";
+                }
+
+
+                ldap_unbind($ldapConnection);
+            }
+            else{
+                $data['user'] = null;
+                $data['message'] = "Error while binding to LDAP server";
+            }
+        }
+        else{
+            $data['user'] = null;
+            $data['message'] = "Error while connecting to LDAP server";
+        }
+
+        return $data;
     }
 
     public function login(Request $request){
@@ -34,7 +145,6 @@ class BackendController extends Controller
             'username' => 'required',
             'password' => 'required'
         ]);
-
         if ($validator->fails()) {
             return redirect('/')->with([
                 'errorCode' => 1,
@@ -42,26 +152,54 @@ class BackendController extends Controller
             ]);
         }
 
-        $user = User::where([
-            'username' => $request->get('username'),
-            'password' => md5($request->get('password'))
-        ])->first();
+        $ldapUser = $this->getUserFromLdap($request->get('username'), $request->get('password'));
 
+        if($ldapUser['user'] != null){
+            $user = User::where([
+                'username' => $request->get('username')
+            ])->first();
 
+            if(!$user){
+                $fullName = $ldapUser['user']['fullName'];
+                $lastName = $ldapUser['user']['lastName'];
 
-        if($user){
+                $newUser = new User();
+                $newUser->email = $request->get('username');
+                $newUser->name = str_replace($lastName, '', $fullName);
+                $newUser->last_name = $lastName;
+                $newUser->role = "Non-admin";
+                $newUser->projects = [];
+                $newUser->save();
+
+                $this->logActions("New user entered in local db => it is first time login for this user =>".$request->get('username'));
+
+                $user = User::where([
+                    'email' => $request->get('username')
+                ])->first();
+            }
+
             $numberOfUnsaved = Project::where('owner', '=', $user['_id'])
                 ->where('saved', '=', false)
                 ->count();
             $request->session()->put('user', $user);
             $request->session()->put('numberOfUnsaved', $numberOfUnsaved);
+            $this->logActions("Successful login of user: ".$request->get('username')." , on: ".date("m-d-Y H:i:S"));
             return redirect('/home2');
         }
+        else{
+            $this->logErrors("User: ".$request->get('username')." , tried to login but error happened => ".$ldapUser['message']);
+            return redirect('/')->with([
+                'errorCode' => 2,
+                'errorMsg' => $ldapUser['message']
+            ]);
+        }
+    }
 
-        return redirect('/')->with([
-            'errorCode' => 2,
-            'errorMsg' => 'User not found!'
-        ]);
+
+    public function logout(Request $request){
+        $request->session()->invalidate();
+        $request->session()->flush();
+        return redirect('/');
     }
 
     public function addNewNumber(Request $request){
@@ -708,23 +846,20 @@ class BackendController extends Controller
 
 
 
-    public function testDb(){
-        $user = new User();
-        $user->username = 'panta';
-        $user->password = md5('panta');
-        $user->name = 'Pantelija';
-        $user->last_name = 'Stosic';
-
-        return dd($user->save());
-    }
-
-
-
-    // public function deleteProjects(){
-    //     Project::query()->delete();
-    //     Number::query()->delete();
-    //     return redirect('/home2');
-    // }
+//    public function testDb(){
+//    $user = new User();
+//    $user->username = 'panta';
+//    $user->password = md5('panta');
+//    $user->name = 'Pantelija';
+//    $user->last_name = 'Stosic';
+//
+//    return dd($user->save());
+//    }
+//    public function deleteProjects(){
+//    Project::query()->delete();
+//    Number::query()->delete();
+//    return redirect('/home2');
+//    }
 
 
 
