@@ -14,9 +14,3 @@ Getting app in local env
 
 - Go to http://localhost:8000/
 
-Important:
-
-API_USERNAME=7818A114-CFCD-4997-A0FC-5011A578E2A0
-
-API_PASSWORD=wONijxUSBkYG3sc4BwenPRwl7IsE1QSBG0dBANHsGQaHsem6s6NxB0nBApbizgJJAw5O2q8pamaNYhaUW6Ex1Q==
-
